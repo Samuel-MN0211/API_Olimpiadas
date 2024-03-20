@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home.dart'; 
+import 'package:teste_olimpiadas/core/app_export.dart';
+import 'screens/home.dart'; 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,8 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomeScreen(), // Use a classe HomeScreen como o valor da propriedade home
+    return MaterialApp(
+      initialRoute: AppRoutes.splashScreen,
+      routes: AppRoutes.routes,
       debugShowCheckedModeBanner: false,
     );
   }
