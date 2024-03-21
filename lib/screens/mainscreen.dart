@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/widgets/custom_elevated_button.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:teste_olimpiadas/core/data.dart';
 
-class MainScreen extends StatelessWidget {
-  final textEditingController = TextEditingController();
-
+class MainScreen extends StatefulWidget {
   MainScreen({Key? key}) : super(key: key);
 
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  TextEditingController textEditingController = TextEditingController();
+  Data data = Data();
+
+   
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,43 +45,42 @@ class MainScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20.v),
-                Container(
-                  height: 223.v,
-                  width: 210.h,
-                  margin: EdgeInsets.only(right: 53.h),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          height: 196.adaptSize,
-                          width: 196.adaptSize,
-                          padding: EdgeInsets.only(
-                            left: 59.h,
-                            top: 59.v,
-                          ),
-                          decoration: AppDecoration.outlineBlueGray.copyWith(
-                            borderRadius: BorderRadiusStyle.circleBorder98,
-                          ),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgSearch,
-                            height: 69.adaptSize,
-                            width: 69.adaptSize,
-                            alignment: Alignment.topLeft,
-                          ),
-                        ),
-                      ),
-                      CustomImageView(
-                        imagePath: ImageConstant.imgInbox,
-                        height: 55.adaptSize,
-                        width: 55.adaptSize,
-                        alignment: Alignment.topRight,
-                      ),
-                    ],
-                  ),
-                ),
+                 SizedBox(height: 20.v),
+                GestureDetector(
+  onTap: () async {
+    print({textEditingController.text});
+    print('Executou!!');
+                  await data.fetchObmData(textEditingController.text);
+                  await data.fetchObcData(textEditingController.text);
+                  setState(() {});
+                },
+  child: Container(
+    height: 223.v,
+    width: 215.h,
+    margin: EdgeInsets.only(right: 53.h),
+    child: Stack(
+      alignment: Alignment.topRight,
+      children: [
+        Align(
+          alignment: Alignment.center, // Centraliza o ícone
+          child: Container(
+            height: 196.adaptSize,
+            width: 196.adaptSize,
+            decoration: AppDecoration.outlineBlueGray.copyWith(
+              borderRadius: BorderRadiusStyle.circleBorder98,
+            ),
+            child: Icon(
+              Icons.search,
+              size: 115.adaptSize, // Tamanho do ícone
+              color: appTheme.blueGray700, // Cor do ícone
+            ),
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
                 SizedBox(height: 50.v), // CONTAINER DO LOGO DO BOOC
                 Container(
                   height: 137.v,

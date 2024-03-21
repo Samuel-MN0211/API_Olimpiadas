@@ -1,6 +1,7 @@
 import 'package:teste_olimpiadas/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:teste_olimpiadas/core/data.dart';
 
 class ResultFoundScreen extends StatelessWidget {
   const ResultFoundScreen({Key? key})

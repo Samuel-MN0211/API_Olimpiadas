@@ -5,61 +5,62 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
   
   @override
-Widget build(BuildContext context) {
-  return SafeArea(
-    child: Scaffold(
-      body: GestureDetector(
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: GestureDetector(
         onTap: () {
-          onTapScreenTitle(context, AppRoutes.mainScreen);
+          onTapScreen(context, AppRoutes.mainScreen);
         },
-        child: Container(
-          width: double.maxFinite,
-          padding: EdgeInsets.only(top: 252.v),
-          child: Column(
-            children: [
-              Text(
-                "BOOC",
-                style: CustomTextStyles.righteousOnPrimary,
-              ),
-              SizedBox(height: 23.v),
-              SizedBox(
-                height: 164.v,
-                width: 268.h,
-                child: Stack(
-                  alignment: Alignment.centerRight,
-                  children: [
-                    CustomImageView(
-                      imagePath: ImageConstant.imgVector,
-                      height: 89.v,
-                      width: 268.h,
-                      alignment: Alignment.bottomCenter,
-                    ),
-                    CustomImageView(
-                      imagePath: ImageConstant.imgGroup,
-                      height: 164.v,
-                      width: 17.h,
-                      alignment: Alignment.centerRight,
-                      margin: EdgeInsets.only(right: 116.h),
-                    ),
-                  ],
+        child: Scaffold(
+          body: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.only(top: 202.v),
+            child: Column(
+              children: [
+                Text(
+                  "BOOC",
+                  style: CustomTextStyles.righteousOnPrimary,
                 ),
-              ),
-              SizedBox(height: 10.v),
-              SizedBox(
-                width: 278.h,
-                child: Divider(
-                  color: appTheme.blueGray700,
+                SizedBox(height: 23.v),
+                SizedBox(
+                  height: 134.v,
+                  width: 268.h,
+                  child: Stack(
+                    alignment: Alignment.centerRight,
+                    children: [
+                      CustomImageView(
+                        imagePath: ImageConstant.imgVector,
+                        height: 89.v,
+                        width: 268.h,
+                        alignment: Alignment.bottomCenter,
+                      ),
+                      CustomImageView(
+                        imagePath: ImageConstant.imgGroup,
+                        height: 164.v,
+                        width: 17.h,
+                        alignment: Alignment.centerRight,
+                        margin: EdgeInsets.only(right: 116.h),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 5.v),
-            ],
+                SizedBox(height: 10.v),
+                SizedBox(
+                  width: 278.h,
+                  child: Divider(
+                    color: appTheme.blueGray700,
+                  ),
+                ),
+                SizedBox(height: 5.v),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
-  void onTapScreenTitle(
+    );
+  }
+
+  void onTapScreen(
     BuildContext context,
     String routeName,
   ) {

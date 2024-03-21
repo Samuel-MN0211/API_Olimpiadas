@@ -18,10 +18,6 @@ class AppRoutes {
   static const String result_FoundScreen =
       '/result_foundscreen';
 
-  static const String iphone1415ProMaxTenScreen =
-      '/iphone_14_15_pro_max_ten_screen';
-
-  static const String appNavigationScreen = '/app_navigation_screen';
 
   static Map<String, WidgetBuilder> routes = {
     mainScreen: (context) => MainScreen(),

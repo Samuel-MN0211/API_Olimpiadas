@@ -165,7 +165,6 @@ class PdfCreator {
     return file;
   }
 }
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -251,5 +250,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-               
