@@ -30,4 +30,6 @@ class ImageConstant {
   static String imgHome = '$imagePath/img_home.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String booc_transparente = '$imagePath/booc_transparente.png';
 }
