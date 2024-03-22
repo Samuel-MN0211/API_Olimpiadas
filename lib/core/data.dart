@@ -36,7 +36,7 @@ class Data {
       }
 
       if (!foundAny) {
-        obm_result += 'Aluno não encontrado\n';
+        obm_result = 'Aluno não encontrado\n';
       }
     } else {
       throw Exception('Failed to load main page');

@@ -4,10 +4,17 @@ import 'package:teste_olimpiadas/core/app_export.dart';
 import 'package:teste_olimpiadas/core/data.dart';
 
 class ResultFoundScreen extends StatelessWidget {
-  const ResultFoundScreen({Key? key})
-      : super(
-          key: key,
-        );
+  final String obmawards;
+  final String obcawards;
+  final String searchTerm;
+
+  const ResultFoundScreen({
+    Key? key,
+    required this.obmawards,
+    required this.obcawards,
+    required this.searchTerm,
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,12 +170,13 @@ class ResultFoundScreen extends StatelessWidget {
             child: SizedBox(
               width: 359.h,
               child: Text(
-                "Aluno(a): \nMaria eduarda Lira",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displayMedium,
-              ),
+  "Aluno(a): \n$searchTerm",
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+  textAlign: TextAlign.center,
+  style: theme.textTheme.displayMedium,
+),
+
             ),
           ),
         ],

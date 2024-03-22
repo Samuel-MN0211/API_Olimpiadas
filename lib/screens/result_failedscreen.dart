@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
 import 'package:teste_olimpiadas/core/data.dart';
 
-class ResultFailedScreen extends StatelessWidget {
-  ResultFailedScreen({Key? key})
-      : super(
-          key: key,
-        );
+class ResultFailedScreen extends StatefulWidget {
+  final String searchTerm;
 
-  TextEditingController headerController = TextEditingController();
+  ResultFailedScreen({Key? key, required this.searchTerm}) : super(key: key);
+
+  @override
+  _ResultFailedScreenState createState() => _ResultFailedScreenState();
+}
+
+class _ResultFailedScreenState extends State<ResultFailedScreen> {
+  late TextEditingController headerController;
+
+  @override
+  void initState() {
+    super.initState();
+    headerController = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +45,19 @@ class ResultFailedScreen extends StatelessWidget {
               ),
               SizedBox(height: 57.v),
               Container(
-                width: 359.h,
-                margin: EdgeInsets.only(
-                  left: 42.h,
-                  right: 27.h,
-                ),
-                child: Text(
-                  "Aluno(a): \nMaria eduarda Lira",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.displayMedium,
-                ),
-              ),
+  width: 359.h,
+  margin: EdgeInsets.only(
+    left: 42.h,
+    right: 27.h,
+  ),
+  child: Text(
+    "Aluno(a): \n${widget.searchTerm}",
+    maxLines: 2,
+    overflow: TextOverflow.ellipsis,
+    textAlign: TextAlign.center,
+    style: theme.textTheme.displayMedium,
+  ),
+),
               SizedBox(height: 98.v),
               SizedBox(
                 width: 233.h,
