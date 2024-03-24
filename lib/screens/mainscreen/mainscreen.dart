@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/widgets/custom_elevated_button.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
 import 'package:teste_olimpiadas/core/data.dart';
-import '../routes/app_routes.dart';
+
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key? key}) : super(key: key);
@@ -14,9 +14,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   TextEditingController textEditingController = TextEditingController();
   Data data = Data();
+  
 
   @override
   Widget build(BuildContext context) {
+     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
