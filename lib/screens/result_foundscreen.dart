@@ -1,8 +1,7 @@
-import 'package:teste_olimpiadas/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
-import 'package:teste_olimpiadas/core/data.dart';
 
+// Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
 class ResultFoundScreen extends StatelessWidget {
   final String obmawards;
   final String obcawards;

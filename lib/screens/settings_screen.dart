@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/widgets/custom_elevated_button.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
-import 'package:teste_olimpiadas/core/data.dart';
+
 
 
 class SettingsScreen extends StatefulWidget {

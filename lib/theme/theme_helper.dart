@@ -10,7 +10,6 @@ class ThemeHelper {
   Map<String, PrimaryColors> _supportedCustomColor = {
     'primary': PrimaryColors()
   };
-
 // A map of color schemes supported by the app
   Map<String, ColorScheme> _supportedColorScheme = {
     'primary': ColorSchemes.primaryColorScheme

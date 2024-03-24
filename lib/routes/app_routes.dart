@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import '../screens/mainscreen.dart';
-import '../screens/splashscreen.dart';
-import '../screens/result_failedscreen.dart';
-import '../screens/result_foundscreen.dart';
+import 'package:teste_olimpiadas/core/app_export.dart';
 
 class AppRoutes {
   static const String mainScreen = '/mainscreen';
   static const String splashScreen = '/splashscreen';
   static const String result_FailedScreen = '/result_failedscreen';
   static const String result_FoundScreen = '/result_foundscreen';
+  static const String settings_Screen = '/settings_screen';
 
   static Map<String, WidgetBuilder> routes = {
     mainScreen: (context) => MainScreen(),
-    splashScreen: (context) => SplashScreen(),
+    splashScreen: (context) => const SplashScreen(),
+    settings_Screen: (context) => SettingsScreen(),
+    
     result_FoundScreen: (context) {
   final args = ModalRoute.of(context)!.settings.arguments as ResultFoundScreenArguments;
   return ResultFoundScreen(

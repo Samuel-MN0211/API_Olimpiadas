@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart' as dom;
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdfLib;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +10,8 @@ class Data {
   String obm_result = '';
   String obc_result = '';
 
+  //Método para buscar URLS desejadas e retornar status da busca da OBM 
+  //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmData(String studentName) async {
     final mainUrl = 'https://www.obm.org.br/quem-somos/premiados-da-obm/';
     final mainResponse = await http.get(Uri.parse(mainUrl));
@@ -42,7 +43,9 @@ class Data {
       throw Exception('Failed to load main page');
     }
   }
-
+  //Método para buscar URLS desejadas e retornar status da busca da OBC
+  // Possui um array de URLs pois ao contrário da OBM, as urls de premiação não estão todas contidas no HTML de uma página de diretório superior
+  //Dentro do corpo chama função para percorrer o HTML das URLs do array com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObcData(String studentName) async {
     final List<String> urls = [
       'http://www.obciencias.com.br/resultados-2023.html',
@@ -70,7 +73,9 @@ class Data {
       }
     }
   }
-
+  // Função para percorrer o HTML das urls passadas pela função fetchObmData, e buscar correspondência de nome.
+  // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
+  // Ao final armazena todas as informações do mapa no resultado "OBM awards" e retorna o resultado 
   List<Map<String, String>> findObmAwards(dom.Document document, String studentName) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmAwards = [];
@@ -105,7 +110,10 @@ class Data {
 
     return obmAwards;
   }
-
+  // Função para percorrer o HTML das urls passadas pela função fetchObcData, e buscar correspondência de nome.
+  // Ao encontrar correspondência, armazena valores referentes a premiação  em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
+  // Como a OBC não possui uma estrutura de premiação tão bem definida quanto a OBM, a função busca por medalhas de bronze, prata, ouro e menções honrosas
+  // Ao final armazena todas as informações do mapa no resultado "OBC awards" e retorna o resultado 
   List<Map<String, String>> findObcAwards(dom.Document document, String studentName) {
     final List<Map<String, String>> obcAwards = [];
 
@@ -144,7 +152,7 @@ class Data {
     return obcAwards;
   }
 }
-
+// Classe para criar PDF
 class PdfCreator {
   static Future<File> generatePdf(String text) async {
     final pdf = pdfLib.Document();
@@ -172,6 +180,10 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+
+
+
+//Classe de interface para teste, apagar futuramente
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textEditingController = TextEditingController();
   Data data = Data();

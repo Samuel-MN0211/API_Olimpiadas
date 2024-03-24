@@ -1,7 +1,7 @@
-import 'package:teste_olimpiadas/widgets/custom_text_form_field.dart';
+
 import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
-import 'package:teste_olimpiadas/core/data.dart';
+
 
 class ResultFailedScreen extends StatefulWidget {
   final String searchTerm;

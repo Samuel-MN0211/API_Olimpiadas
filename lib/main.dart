@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
-import 'package:teste_olimpiadas/screens/splashscreen/splashscreen.dart';
+
  
 
 void main() {
