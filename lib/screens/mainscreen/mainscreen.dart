@@ -28,149 +28,170 @@ class _MainScreenState extends State<MainScreen> {
                   right: 27.h,
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Stack(
                   children: [
-                    MainScreenIcons.buildMainScreenIcons(context),
-                    SizedBox(height: 10.v),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 25.h),
-                      child: TextField(
-                        controller: textEditingController,
-                        decoration: const InputDecoration(
-                          hintText: "Pesquise o nome do(a) Aluno(a)",
-                          border: OutlineInputBorder(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        MainScreenIcons.buildMainScreenIcons(context),
+                        SizedBox(height: 10.v),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 25.h),
+                          child: TextField(
+                            controller: textEditingController,
+                            decoration: const InputDecoration(
+                              hintText: "Pesquise o nome do(a) Aluno(a)",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 20.v),
-                    GestureDetector(
-                      onTap: () async {
-                        String validatedText = TextValidation.validateText(context, textEditingController);
-                        if (validatedText.isNotEmpty) {
-                          textEditingController.text = validatedText;
-                          if (settingsProvider.isObmSelected == true) {
-                            await data.fetchObmData(textEditingController.text);
-                          }
-                          if (settingsProvider.isObcSelected == true){
-                            await data.fetchObcData(textEditingController.text);}
+                        SizedBox(height: 20.v),
+                        GestureDetector(
+                          onTap: () async {
+                            String validatedText = TextValidation.validateText(context, textEditingController);
+                            if (validatedText.isNotEmpty) {
+                              textEditingController.text = validatedText;
+                              if (settingsProvider.isObmSelected == true) {
+                                print('ATIVOU ATIVOU ATIVOU OBM');
+                                await data.fetchObmData(textEditingController.text);
+                              }
+                              if (settingsProvider.isObcSelected == true){
+                                print('ATIVOU ATIVOU ATIVOU OBC');
+                                await data.fetchObcData(textEditingController.text);}
 
-                          if (data.obm_result == 'Aluno não encontrado\n' && data.obc_result == '') {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.result_FailedScreen,
-                              arguments: textEditingController.text,
-                            );
-                          } else {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.result_FoundScreen,
-                              arguments: ResultFoundScreenArguments(
-                                obmawards: data.obm_result,
-                                obcawards: data.obc_result,
-                                searchTerm: textEditingController.text,
-                              ),
-                            );
-                          }
-                        }
-                      },
-                      child: Container(
-                        height: 223.v,
-                        width: 225.h,
-                        margin: EdgeInsets.only(right: 53.h),
-                        child: Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                height: 196.adaptSize,
-                                width: 196.adaptSize,
-                                decoration: AppDecoration.outlineBlueGray.copyWith(
-                                  borderRadius: BorderRadiusStyle.circleBorder98,
+                              if (data.obm_result == 'Aluno não encontrado\n' && data.obc_result == '') {
+  Navigator.pushNamed(
+    context,
+    AppRoutes.result_FailedScreen,
+    arguments: textEditingController.text,
+  );
+} else if (data.obm_result != 'Aluno não encontrado\n' || data.obc_result != '') {
+  Navigator.pushNamed(
+    context,
+    AppRoutes.result_FoundScreen,
+    arguments: ResultFoundScreenArguments(
+      obmawards: data.obm_result,
+      obcawards: data.obc_result,
+      searchTerm: textEditingController.text,
+    ),
+  );
+}
+                            }
+                          },
+                          child: Container(
+                            height: 223.v,
+                            width: 225.h,
+                            margin: EdgeInsets.only(right: 53.h),
+                            child: Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    height: 196.adaptSize,
+                                    width: 196.adaptSize,
+                                    decoration: AppDecoration.outlineBlueGray.copyWith(
+                                      borderRadius: BorderRadiusStyle.circleBorder98,
+                                    ),
+                                    child: Icon(
+                                      Icons.search,
+                                      size: 115.adaptSize,
+                                      color: appTheme.blueGray700,
+                                    ),
+                                  ),
                                 ),
-                                child: Icon(
-                                  Icons.search,
-                                  size: 115.adaptSize,
-                                  color: appTheme.blueGray700,
-                                ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 50.v),
-                    Container(
-                      height: 137.v,
-                      width: 224.h,
-                      margin: EdgeInsets.only(right: 55.h),
-                      child: Stack(
-                        alignment: Alignment.centerRight,
-                        children: [
-                          CustomImageView(
-                            imagePath: ImageConstant.imgVector,
-                            height: 74.v,
-                            width: 224.h,
-                            alignment: Alignment.bottomCenter,
-                          ),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgGroup,
-                            height: 137.v,
-                            width: 14.h,
+                        SizedBox(height: 50.v),
+                        Container(
+                          height: 137.v,
+                          width: 224.h,
+                          margin: EdgeInsets.only(right: 55.h),
+                          child: Stack(
                             alignment: Alignment.centerRight,
-                            margin: EdgeInsets.only(right: 97.h),
+                            children: [
+                              CustomImageView(
+                                imagePath: ImageConstant.imgVector,
+                                height: 74.v,
+                                width: 224.h,
+                                alignment: Alignment.bottomCenter,
+                              ),
+                              CustomImageView(
+                                imagePath: ImageConstant.imgGroup,
+                                height: 137.v,
+                                width: 14.h,
+                                alignment: Alignment.centerRight,
+                                margin: EdgeInsets.only(right: 97.h),
+                              ),
+                              CustomImageView(
+                                imagePath: ImageConstant.imgVector,
+                                height: 74.v,
+                                width: 224.h,
+                                alignment: Alignment.bottomCenter,
+                              ),
+                              CustomImageView(
+                                imagePath: ImageConstant.imgGroup,
+                                height: 137.v,
+                                width: 14.h,
+                                alignment: Alignment.centerRight,
+                                margin: EdgeInsets.only(right: 97.h),
+                              ),
+                            ],
                           ),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgVector,
-                            height: 74.v,
-                            width: 224.h,
-                            alignment: Alignment.bottomCenter,
-                          ),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgGroup,
-                            height: 137.v,
-                            width: 14.h,
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.only(right: 97.h),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10.v),
-                    Container(
-                      height: 3.v,
-                      width: 233.h,
-                      margin: EdgeInsets.only(right: 52.h),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
+                        ),
+                        SizedBox(height: 10.v),
+                        Container(
+                          height: 3.v,
+                          width: 233.h,
+                          margin: EdgeInsets.only(right: 52.h),
+                          child: Stack(
                             alignment: Alignment.center,
-                            child: SizedBox(
-                              width: 233.h,
-                              child: Divider(),
-                            ),
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  width: 233.h,
+                                  child: Divider(),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: SizedBox(
+                                  width: 233.h,
+                                  child: Divider(),
+                                ),
+                              ),
+                            ],
                           ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              width: 233.h,
-                              child: Divider(),
-                            ),
+                        ),
+                        SizedBox(height: 8.v),
+                        Padding(
+                          padding: EdgeInsets.only(right: 121.h),
+                          child: Text(
+                            "BOOC",
+                            style: theme.textTheme.headlineLarge,
                           ),
-                        ],
+                        ),
+                        SizedBox(height: 5.v),
+                      ],
+                    ),
+                    Positioned(
+                      top: 20.v,
+                      right: 20.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showSettingsModal(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(20.h),
+                          primary: Colors.red,
+                        ),
+                        child: Icon(Icons.settings, color: Colors.white),
                       ),
                     ),
-                    SizedBox(height: 8.v),
-                    Padding(
-                      padding: EdgeInsets.only(right: 121.h),
-                      child: Text(
-                        "BOOC",
-                        style: theme.textTheme.headlineLarge,
-                      ),
-                    ),
-                    SizedBox(height: 5.v),
                   ],
                 ),
               ),
@@ -181,5 +202,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-
-

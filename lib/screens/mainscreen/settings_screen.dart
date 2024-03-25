@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teste_olimpiadas/core/app_export.dart';
 
 
-
+// Atualmente utilizada para construir o modal implementado na mainscreen e configurado pelo modal_settings.dart
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 

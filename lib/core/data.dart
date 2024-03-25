@@ -13,7 +13,7 @@ class Data {
   //Método para buscar URLS desejadas e retornar status da busca da OBM 
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmData(String studentName) async {
-    final mainUrl = 'https://www.obm.org.br/quem-somos/premiados-da-obm/';
+    const mainUrl = 'https://www.obm.org.br/quem-somos/premiados-da-obm/';
     final mainResponse = await http.get(Uri.parse(mainUrl));
     if (mainResponse.statusCode == 200) {
       final mainDocument = parser.parse(mainResponse.body);
@@ -69,6 +69,7 @@ class Data {
           obc_result += 'Premiações de $studentName na subpágina $url: $obcAwards\n';
         }
       } else {
+
         print('Failed to load data from $url');
       }
     }
@@ -118,13 +119,13 @@ class Data {
     final List<Map<String, String>> obcAwards = [];
 
     final paragraphs = document.querySelectorAll('.main-wrap .paragraph');
-    bool studentFound = false;
+    
 
     for (final paragraph in paragraphs) {
       final studentNames = paragraph.querySelectorAll('strong');
       for (final name in studentNames) {
         if (name.text.contains(studentName)) {
-          studentFound = true;
+          
           final award = <String, String>{};
 
           award['Nome'] = studentName;
@@ -143,10 +144,6 @@ class Data {
           obcAwards.add(award);
         }
       }
-    }
-
-    if (!studentFound) {
-      obcAwards.add({'Nome': 'Aluno(a) não encontrado(a)'});
     }
 
     return obcAwards;
