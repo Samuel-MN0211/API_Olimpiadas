@@ -49,34 +49,7 @@ class _MainScreenState extends State<MainScreen> {
                         GestureDetector(
                           onTap: () async {
                             String validatedText = TextValidation.validateText(context, textEditingController);
-                            if (validatedText.isNotEmpty) {
-                              textEditingController.text = validatedText;
-                              if (settingsProvider.isObmSelected == true) {
-                                print('ATIVOU ATIVOU ATIVOU OBM');
-                                await data.fetchObmData(textEditingController.text);
-                              }
-                              if (settingsProvider.isObcSelected == true){
-                                print('ATIVOU ATIVOU ATIVOU OBC');
-                                await data.fetchObcData(textEditingController.text);}
-
-                              if (data.obm_result == 'Aluno não encontrado\n' && data.obc_result == '') {
-  Navigator.pushNamed(
-    context,
-    AppRoutes.result_FailedScreen,
-    arguments: textEditingController.text,
-  );
-} else if (data.obm_result != 'Aluno não encontrado\n' || data.obc_result != '') {
-  Navigator.pushNamed(
-    context,
-    AppRoutes.result_FoundScreen,
-    arguments: ResultFoundScreenArguments(
-      obmawards: data.obm_result,
-      obcawards: data.obc_result,
-      searchTerm: textEditingController.text,
-    ),
-  );
-}
-                            }
+                            await SearchValidation.validateAndNavigate(context, validatedText, textEditingController, settingsProvider, data);
                           },
                           child: Container(
                             height: 223.v,
@@ -182,6 +155,7 @@ class _MainScreenState extends State<MainScreen> {
                       right: 20.h,
                       child: ElevatedButton(
                         onPressed: () {
+                          
                           showSettingsModal(context);
                         },
                         style: ElevatedButton.styleFrom(
