@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
-
- 
+import 'package:BOOC/core/app_export.dart';
 
 void main() {
   runApp(
@@ -18,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home:const SplashScreen(),
+      home: const SplashScreen(),
       routes: AppRoutes.routes,
       debugShowCheckedModeBanner: false,
     );

@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
-
+import 'package:BOOC/core/app_export.dart';
 
 class ResultFailedScreen extends StatefulWidget {
   final String searchTerm;
@@ -37,33 +35,28 @@ class _ResultFailedScreenState extends State<ResultFailedScreen> {
                   left: 49.h,
                   right: 36.h,
                 ),
-                child: CustomTextFormField(
-                  controller: headerController,
-                  hintText: "Pesquise o nome do(a) Aluno(a)",
-                  textInputAction: TextInputAction.done,
-                ),
               ),
               SizedBox(height: 57.v),
               Container(
-  width: 359.h,
-  margin: EdgeInsets.only(
-    left: 42.h,
-    right: 27.h,
-  ),
-  child: Text(
-    "Aluno(a): \n${widget.searchTerm}",
-    maxLines: 2,
-    overflow: TextOverflow.ellipsis,
-    textAlign: TextAlign.center,
-    style: theme.textTheme.displayMedium,
-  ),
-),
-              SizedBox(height: 98.v),
+                width: 359.h,
+                margin: EdgeInsets.only(
+                  left: 42.h,
+                  right: 27.h,
+                ),
+                child: Text(
+                  "Aluno(a): \n${widget.searchTerm}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.displayMedium,
+                ),
+              ),
+              SizedBox(height: 48.v),
               SizedBox(
-                width: 233.h,
+                width: 333.h,
                 child: Text(
                   "Nenhuma premiação encontrada!",
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headlineSmall!.copyWith(

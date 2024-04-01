@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/utils/size_utils.dart';
+import 'package:BOOC/core/utils/size_utils.dart';
 
 String _appTheme = "primary";
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
 class AppRoutes {
   static const String mainScreen = '/mainscreen';
@@ -12,20 +12,20 @@ class AppRoutes {
     mainScreen: (context) => MainScreen(),
     splashScreen: (context) => const SplashScreen(),
     settings_Screen: (context) => SettingsScreen(),
-    
     result_FoundScreen: (context) {
-  final args = ModalRoute.of(context)!.settings.arguments as ResultFoundScreenArguments;
-  return ResultFoundScreen(
-    obmawards: args.obmawards,
-    obcawards: args.obcawards,
-    searchTerm: args.searchTerm,
-  );
-},result_FailedScreen: (context) {
-    final args = ModalRoute.of(context)!.settings.arguments as String;
-    return ResultFailedScreen(searchTerm: args);
-  },
-}; // Adicionado
-  
+      final args = ModalRoute.of(context)!.settings.arguments
+          as ResultFoundScreenArguments;
+      return ResultFoundScreen(
+        obmawards: args.obmawards,
+        obcawards: args.obcawards,
+        searchTerm: args.searchTerm,
+      );
+    },
+    result_FailedScreen: (context) {
+      final args = ModalRoute.of(context)!.settings.arguments as String;
+      return ResultFailedScreen(searchTerm: args);
+    },
+  }; // Adicionado
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;

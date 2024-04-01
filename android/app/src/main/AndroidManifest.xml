@@ -2,7 +2,7 @@
     <application
         android:label="teste_olimpiadas"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/booc_launch"
          android:enableOnBackInvokedCallback="true">
         <activity
             android:name=".MainActivity"

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
 // Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
 class ResultFoundScreen extends StatelessWidget {
@@ -13,7 +13,6 @@ class ResultFoundScreen extends StatelessWidget {
     required this.obcawards,
     required this.searchTerm,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -169,13 +168,12 @@ class ResultFoundScreen extends StatelessWidget {
             child: SizedBox(
               width: 359.h,
               child: Text(
-  "Aluno(a): \n$searchTerm",
-  maxLines: 2,
-  overflow: TextOverflow.ellipsis,
-  textAlign: TextAlign.center,
-  style: theme.textTheme.displayMedium,
-),
-
+                "Aluno(a): \n$searchTerm",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.displayMedium,
+              ),
             ),
           ),
         ],

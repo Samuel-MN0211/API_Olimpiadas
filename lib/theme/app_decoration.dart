@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
 class AppDecoration {
   // Fill decorations

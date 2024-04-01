@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
-
-
-// classe de "SplashScreen" que é a tela de abertura do aplicativo. 
+// classe de "SplashScreen" que é a tela de abertura do aplicativo.
 //Roteia para a main ao receber qualquer toque na tela. (Gesture Detector + função navigateToMain Envolvendo todo o Scaffold)
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

@@ -10,7 +10,7 @@ class Data {
   String obm_result = '';
   String obc_result = '';
 
-  //Método para buscar URLS desejadas e retornar status da busca da OBM 
+  //Método para buscar URLS desejadas e retornar status da busca da OBM
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmData(String studentName) async {
     const mainUrl = 'https://www.obm.org.br/quem-somos/premiados-da-obm/';
@@ -18,7 +18,8 @@ class Data {
     if (mainResponse.statusCode == 200) {
       final mainDocument = parser.parse(mainResponse.body);
 
-      final subUrls = mainDocument.querySelectorAll('a[href^="https://www.obm.org.br/premiados"]');
+      final subUrls = mainDocument
+          .querySelectorAll('a[href^="https://www.obm.org.br/premiados"]');
       bool foundAny = false;
 
       for (final subUrlElement in subUrls) {
@@ -28,7 +29,8 @@ class Data {
           final subDocument = parser.parse(subResponse.body);
           final obmAwards = findObmAwards(subDocument, studentName);
           if (obmAwards.isNotEmpty) {
-            obm_result += 'Premiações de $studentName na subpágina $subUrl: $obmAwards\n';
+            obm_result +=
+                'Premiações de $studentName na subpágina $subUrl: $obmAwards\n';
             foundAny = true;
           }
         } else {
@@ -43,6 +45,7 @@ class Data {
       throw Exception('Failed to load main page');
     }
   }
+
   //Método para buscar URLS desejadas e retornar status da busca da OBC
   // Possui um array de URLs pois ao contrário da OBM, as urls de premiação não estão todas contidas no HTML de uma página de diretório superior
   //Dentro do corpo chama função para percorrer o HTML das URLs do array com statuscode 200 (sucesso no get) e buscar as premiações
@@ -66,18 +69,20 @@ class Data {
         final document = parser.parse(response.body);
         final obcAwards = findObcAwards(document, studentName);
         if (obcAwards.isNotEmpty) {
-          obc_result += 'Premiações de $studentName na subpágina $url: $obcAwards\n';
+          obc_result +=
+              'Premiações de $studentName na subpágina $url: $obcAwards\n';
         }
       } else {
-
         print('Failed to load data from $url');
       }
     }
   }
+
   // Função para percorrer o HTML das urls passadas pela função fetchObmData, e buscar correspondência de nome.
   // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
-  // Ao final armazena todas as informações do mapa no resultado "OBM awards" e retorna o resultado 
-  List<Map<String, String>> findObmAwards(dom.Document document, String studentName) {
+  // Ao final armazena todas as informações do mapa no resultado "OBM awards" e retorna o resultado
+  List<Map<String, String>> findObmAwards(
+      dom.Document document, String studentName) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmAwards = [];
 
@@ -111,21 +116,21 @@ class Data {
 
     return obmAwards;
   }
+
   // Função para percorrer o HTML das urls passadas pela função fetchObcData, e buscar correspondência de nome.
   // Ao encontrar correspondência, armazena valores referentes a premiação  em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
   // Como a OBC não possui uma estrutura de premiação tão bem definida quanto a OBM, a função busca por medalhas de bronze, prata, ouro e menções honrosas
-  // Ao final armazena todas as informações do mapa no resultado "OBC awards" e retorna o resultado 
-  List<Map<String, String>> findObcAwards(dom.Document document, String studentName) {
+  // Ao final armazena todas as informações do mapa no resultado "OBC awards" e retorna o resultado
+  List<Map<String, String>> findObcAwards(
+      dom.Document document, String studentName) {
     final List<Map<String, String>> obcAwards = [];
 
     final paragraphs = document.querySelectorAll('.main-wrap .paragraph');
-    
 
     for (final paragraph in paragraphs) {
       final studentNames = paragraph.querySelectorAll('strong');
       for (final name in studentNames) {
         if (name.text.contains(studentName)) {
-          
           final award = <String, String>{};
 
           award['Nome'] = studentName;
@@ -149,6 +154,7 @@ class Data {
     return obcAwards;
   }
 }
+
 // Classe para criar PDF
 class PdfCreator {
   static Future<File> generatePdf(String text) async {
@@ -170,15 +176,13 @@ class PdfCreator {
     return file;
   }
 }
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
-
-
-
 
 //Classe de interface para teste, apagar futuramente
 class _HomeScreenState extends State<HomeScreen> {
@@ -210,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(                onPressed: () async {
+              ElevatedButton(
+                onPressed: () async {
                   await data.fetchObmData(textEditingController.text);
                   await data.fetchObcData(textEditingController.text);
                   setState(() {});
@@ -220,19 +225,21 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
-                  final file = await PdfCreator.generatePdf('${data.obm_result}\n${data.obc_result}');
+                  final file = await PdfCreator.generatePdf(
+                      '${data.obm_result}\n${data.obc_result}');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('PDF saved as ${file.path}')),
                   );
                 },
-                child: Text('Export to PDF'),
+                child: const Text('Export to PDF'),
               ),
               const SizedBox(height: 16),
               if (data.obm_result.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('OBM Result:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('OBM Result:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(data.obm_result),
@@ -244,7 +251,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('OBC Result:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('OBC Result:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Text(data.obc_result),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
-
+import 'package:BOOC/core/app_export.dart';
 
 // Atualmente utilizada para construir o modal implementado na mainscreen e configurado pelo modal_settings.dart
 class SettingsScreen extends StatefulWidget {
@@ -17,7 +16,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text('Configurações'),
       ),
-      body: SingleChildScrollView( // Adicione o SingleChildScrollView aqui
+      body: SingleChildScrollView(
+        // Adicione o SingleChildScrollView aqui
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<SettingsProvider>(
@@ -27,19 +27,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   CheckboxListTile(
                     title: Text('OBM'),
-                    value: settingsProvider.isObmSelected, // Use o provider para obter o estado do checkbox
+                    value: settingsProvider
+                        .isObmSelected, // Use o provider para obter o estado do checkbox
                     onChanged: (value) {
                       setState(() {
-                        settingsProvider.toggleObm(); // Use o provider para alternar o estado do checkbox
+                        settingsProvider
+                            .toggleObm(); // Use o provider para alternar o estado do checkbox
                       });
                     },
                   ),
                   CheckboxListTile(
                     title: Text('OBC'),
-                    value: settingsProvider.isObcSelected, // Use o provider para obter o estado do checkbox
+                    value: settingsProvider
+                        .isObcSelected, // Use o provider para obter o estado do checkbox
                     onChanged: (value) {
                       setState(() {
-                        settingsProvider.toggleObc(); // Use o provider para alternar o estado do checkbox
+                        settingsProvider
+                            .toggleObc(); // Use o provider para alternar o estado do checkbox
                       });
                     },
                   ),

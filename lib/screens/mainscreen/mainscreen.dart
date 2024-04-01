@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
         return SafeArea(
           child: Scaffold(
             body: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Container(
                 width: double.maxFinite,
                 padding: EdgeInsets.only(
@@ -45,37 +45,51 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20.v),
-                        GestureDetector(
-                          onTap: () async {
-                            String validatedText = TextValidation.validateText(context, textEditingController);
-                            await SearchValidation.validateAndNavigate(context, validatedText, textEditingController, settingsProvider, data);
-                          },
-                          child: Container(
-                            height: 223.v,
-                            width: 225.h,
-                            margin: EdgeInsets.only(right: 53.h),
-                            child: Stack(
-                              alignment: Alignment.topRight,
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    height: 196.adaptSize,
-                                    width: 196.adaptSize,
-                                    decoration: AppDecoration.outlineBlueGray.copyWith(
-                                      borderRadius: BorderRadiusStyle.circleBorder98,
+                        SizedBox(height: 40.v),
+                        Stack(
+                          alignment: Alignment
+                              .center, // Centraliza o conteúdo do Stack
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 75.h),
+                              child: Ink(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(
+                                      100), // Define a borda do círculo para o Container
+                                ),
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    String validatedText =
+                                        TextValidation.validateText(
+                                            context, textEditingController);
+                                    await SearchValidation.validateAndNavigate(
+                                        context,
+                                        validatedText,
+                                        textEditingController,
+                                        settingsProvider,
+                                        data);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(112.5),
+                                      side: BorderSide(
+                                          color: appTheme.blueGray700),
                                     ),
-                                    child: Icon(
-                                      Icons.search,
-                                      size: 115.adaptSize,
-                                      color: appTheme.blueGray700,
-                                    ),
+                                    minimumSize: Size(192.h,
+                                        190.v), // Define o tamanho mínimo do botão
+                                  ),
+                                  child: Icon(
+                                    Icons.search,
+                                    size: 115.adaptSize,
+                                    color: appTheme.blueGray700,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                         SizedBox(height: 50.v),
                         Container(
@@ -151,19 +165,19 @@ class _MainScreenState extends State<MainScreen> {
                       ],
                     ),
                     Positioned(
-                      top: 20.v,
+                      top: 220.v,
                       right: 20.h,
                       child: ElevatedButton(
                         onPressed: () {
-                          
                           showSettingsModal(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          shape: CircleBorder(),
+                          shape: const CircleBorder(),
                           padding: EdgeInsets.all(20.h),
-                          primary: Colors.red,
+                          side: BorderSide(color: appTheme.blueGray700),
                         ),
-                        child: Icon(Icons.settings, color: Colors.white),
+                        child:
+                            Icon(Icons.settings, color: appTheme.blueGray700),
                       ),
                     ),
                   ],

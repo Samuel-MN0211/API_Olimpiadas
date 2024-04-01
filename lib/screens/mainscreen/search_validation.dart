@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:teste_olimpiadas/core/app_export.dart';
-
+import 'package:BOOC/core/app_export.dart';
 
 //Classe para validar, fazer validações referentes a busca e chamada de funções de fetch / find dados
 class SearchValidation {
-  static Future<void> validateAndNavigate(BuildContext context, String validatedText, TextEditingController textEditingController, SettingsProvider settingsProvider, Data data) async {
+  static Future<void> validateAndNavigate(
+      BuildContext context,
+      String validatedText,
+      TextEditingController textEditingController,
+      SettingsProvider settingsProvider,
+      Data data) async {
     if (validatedText.isNotEmpty) {
       textEditingController.text = validatedText;
       if (settingsProvider.isObmSelected == true) {
@@ -16,13 +20,15 @@ class SearchValidation {
         await data.fetchObcData(textEditingController.text);
       }
 
-      if (data.obm_result == 'Aluno não encontrado\n' && data.obc_result == '') {
+      if (data.obm_result == 'Aluno não encontrado\n' &&
+          data.obc_result == '') {
         Navigator.pushNamed(
           context,
           AppRoutes.result_FailedScreen,
           arguments: textEditingController.text,
         );
-      } else if (data.obm_result != 'Aluno não encontrado\n' || data.obc_result != '') {
+      } else if (data.obm_result != 'Aluno não encontrado\n' ||
+          data.obc_result != '') {
         Navigator.pushNamed(
           context,
           AppRoutes.result_FoundScreen,
