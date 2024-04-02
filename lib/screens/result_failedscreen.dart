@@ -43,48 +43,49 @@ class _ResultFailedScreenState extends State<ResultFailedScreen> {
                   left: 42.h,
                   right: 27.h,
                 ),
-                child: Text(
-                  "Aluno(a): \n${widget.searchTerm}",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.displayMedium,
-                ),
-              ),
-              SizedBox(height: 48.v),
-              SizedBox(
-                width: 333.h,
-                child: Text(
-                  "Nenhuma premiação encontrada!",
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall!.copyWith(
-                    height: 1.33,
+                child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "Aluno(a): \n${widget.searchTerm}",
+                    overflow: TextOverflow.visible,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.displayMedium,
                   ),
                 ),
               ),
-              Spacer(),
+              SizedBox(height: 48.v),
+              Expanded(
+                child: Container(
+                  width: 333.h,
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Nenhuma premiação encontrada!",
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineSmall!.copyWith(
+                      height: 1.33,
+                    ),
+                  ),
+                ),
+              ),
               Divider(
                 color: appTheme.gray300,
               ),
               SizedBox(height: 39.v),
-              Container(
-                height: 86.adaptSize,
-                width: 86.adaptSize,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 18.h,
-                  vertical: 17.v,
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    AppRoutes.mainScreen,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.all(20.h),
+                  primary: appTheme.blueGray700,
                 ),
-                decoration: AppDecoration.fillPrimary.copyWith(
-                  borderRadius: BorderRadiusStyle.circleBorder43,
-                ),
-                child: CustomImageView(
-                  imagePath: ImageConstant.imgHome,
-                  height: 51.v,
-                  width: 49.h,
-                  alignment: Alignment.center,
-                ),
+                child: Icon(Icons.home, color: Colors.white),
               ),
               SizedBox(height: 46.v),
             ],

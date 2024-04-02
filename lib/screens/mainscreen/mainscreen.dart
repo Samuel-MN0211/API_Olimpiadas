@@ -11,6 +11,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   TextEditingController textEditingController = TextEditingController();
   Data data = Data();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +60,22 @@ class _MainScreenState extends State<MainScreen> {
                                       100), // Define a borda do círculo para o Container
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () async {
-                                    String validatedText =
-                                        TextValidation.validateText(
-                                            context, textEditingController);
-                                    await SearchValidation.validateAndNavigate(
-                                        context,
-                                        validatedText,
-                                        textEditingController,
-                                        settingsProvider,
-                                        data);
-                                  },
+                                  onPressed: isLoading
+                                      ? null
+                                      : () async {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
+                                          await SearchValidation
+                                              .handleButtonPress(
+                                                  context,
+                                                  textEditingController,
+                                                  settingsProvider,
+                                                  data);
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        },
                                   style: ElevatedButton.styleFrom(
                                     padding: EdgeInsets.zero,
                                     shape: RoundedRectangleBorder(
@@ -78,14 +84,15 @@ class _MainScreenState extends State<MainScreen> {
                                       side: BorderSide(
                                           color: appTheme.blueGray700),
                                     ),
-                                    minimumSize: Size(192.h,
-                                        190.v), // Define o tamanho mínimo do botão
+                                    minimumSize: Size(192.h, 190.v),
                                   ),
-                                  child: Icon(
-                                    Icons.search,
-                                    size: 115.adaptSize,
-                                    color: appTheme.blueGray700,
-                                  ),
+                                  child: isLoading
+                                      ? CircularProgressIndicator()
+                                      : Icon(
+                                          Icons.search,
+                                          size: 115.adaptSize,
+                                          color: appTheme.blueGray700,
+                                        ),
                                 ),
                               ),
                             ),

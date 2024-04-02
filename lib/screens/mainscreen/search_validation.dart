@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:BOOC/core/app_export.dart';
 
-//Classe para validar, fazer validações referentes a busca e chamada de funções de fetch / find dados
+//Classe para validar, fazer validações referentes a busca, chamada de funções de fetch / find dados e tratamento do clique do botão
 class SearchValidation {
   static Future<void> validateAndNavigate(
       BuildContext context,
@@ -40,5 +40,16 @@ class SearchValidation {
         );
       }
     }
+  }
+
+  static Future<void> handleButtonPress(
+      BuildContext context,
+      TextEditingController textEditingController,
+      SettingsProvider settingsProvider,
+      Data data) async {
+    String validatedText =
+        TextValidation.validateText(context, textEditingController);
+    await validateAndNavigate(
+        context, validatedText, textEditingController, settingsProvider, data);
   }
 }
