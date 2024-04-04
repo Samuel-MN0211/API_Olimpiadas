@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class Data {
-  String obm_result = '';
+  String obm_result = 'Aluno não encontrado\n';
   String obc_result = '';
 
   //Método para buscar URLS desejadas e retornar status da busca da OBM
@@ -20,26 +20,25 @@ class Data {
 
       final subUrls = mainDocument
           .querySelectorAll('a[href^="https://www.obm.org.br/premiados"]');
-      bool foundAny = false;
+      final List<Map<String, String>> obmAwards = [];
 
       for (final subUrlElement in subUrls) {
         final subUrl = subUrlElement.attributes['href'];
         final subResponse = await http.get(Uri.parse(subUrl!));
         if (subResponse.statusCode == 200) {
           final subDocument = parser.parse(subResponse.body);
-          final obmAwards = findObmAwards(subDocument, studentName);
-          if (obmAwards.isNotEmpty) {
-            obm_result +=
-                'Premiações de $studentName na subpágina $subUrl: $obmAwards\n';
-            foundAny = true;
-          }
+          final awards = findObmAwards(subDocument, studentName, subUrl);
+          obmAwards.addAll(awards);
+          print(obmAwards);
         } else {
           print('Failed to load data from $subUrl');
         }
       }
 
-      if (!foundAny) {
+      if (obmAwards.isEmpty) {
         obm_result = 'Aluno não encontrado\n';
+      } else {
+        obm_result = 'Premiações de $studentName $obmAwards\n';
       }
     } else {
       throw Exception('Failed to load main page');
@@ -63,15 +62,14 @@ class Data {
       'http://www.obciencias.com.br/resultados-2014.html',
     ];
 
+    final List<Map<String, String>> obcAwards = [];
+
     for (final url in urls) {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final document = parser.parse(response.body);
-        final obcAwards = findObcAwards(document, studentName);
-        if (obcAwards.isNotEmpty) {
-          obc_result +=
-              'Premiações de $studentName na subpágina $url: $obcAwards\n';
-        }
+        final awards = findObcAwards(document, studentName);
+        obcAwards.addAll(awards);
       } else {
         print('Failed to load data from $url');
       }
@@ -82,30 +80,103 @@ class Data {
   // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
   // Ao final armazena todas as informações do mapa no resultado "OBM awards" e retorna o resultado
   List<Map<String, String>> findObmAwards(
-      dom.Document document, String studentName) {
+      dom.Document document, String studentName, String url) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmAwards = [];
+    print(' ENTROUENTROUENTROUENTROUENTROU');
 
     for (final table in tables) {
       final rows = table.querySelectorAll('tr');
+
       for (final row in rows) {
         final cells = row.children;
         for (int i = 0; i < cells.length; i++) {
-          if (cells[i].text.contains(studentName)) {
+          final cellText = cells[i].text;
+          if (cellText.contains(studentName)) {
             final award = <String, String>{};
 
-            award['Nome'] = studentName;
+            award['Nome'] = cellText; // Armazena o nome completo
+            award['URL'] = url; // Armazena a URL
 
-            if (i + 1 < cells.length) {
-              award['Origem'] = cells[i + 1].text;
-            }
+            if (url.contains('2017') ||
+                url.contains('2018') ||
+                url.contains('2019') ||
+                url.contains('2020') ||
+                url.contains('2021') ||
+                url.contains('2022') ||
+                url.contains('2023') ||
+                url.contains('2024') ||
+                url.contains('2025') ||
+                url.contains('2026') ||
+                url.contains('2027') ||
+                url.contains('2028') ||
+                url.contains('2029') ||
+                url.contains('2030')) {
+              if (i + 1 < cells.length) {
+                award['Cidade - Estado'] = cells[i + 1].text;
+              }
 
-            if (i + 2 < cells.length) {
-              award['Pontuação'] = cells[i + 2].text;
-            }
+              if (i + 2 < cells.length) {
+                award['Pontuação'] = cells[i + 2].text;
+              }
+              if (i + 3 < cells.length) {
+                award['Medalha'] = cells[i + 3].text;
+              }
+            } else if (url.contains('2016') ||
+                url.contains('2015') ||
+                url.contains('2014') ||
+                url.contains('2013') ||
+                url.contains('2012') ||
+                url.contains('2011') ||
+                url.contains('2010') ||
+                url.contains('2009') ||
+                url.contains('2008') ||
+                url.contains('2007') ||
+                url.contains('2006') ||
+                url.contains('2005') ||
+                url.contains('2004') ||
+                url.contains('2003') ||
+                url.contains('2002') ||
+                url.contains('2001') ||
+                url.contains('2000') ||
+                url.contains('1999') ||
+                url.contains('1998')) {
+              if (i + 1 < cells.length) {
+                award['Pontuação'] = cells[i + 1].text;
+              }
 
-            if (i + 3 < cells.length) {
-              award['Medalha'] = cells[i + 3].text;
+              if (i + 2 < cells.length) {
+                award['Cidade - Estado'] = cells[i + 2].text;
+              }
+              if (i + 3 < cells.length) {
+                award['Medalha'] = cells[i + 3].text;
+              }
+            } else if (url.contains('1997') ||
+                url.contains('1996') ||
+                url.contains('1995') ||
+                url.contains('1994') ||
+                url.contains('1993') ||
+                url.contains('1992') ||
+                url.contains('1991') ||
+                url.contains('1990') ||
+                url.contains('1989') ||
+                url.contains('1988') ||
+                url.contains('1987') ||
+                url.contains('1986') ||
+                url.contains('1985') ||
+                url.contains('1984') ||
+                url.contains('1983') ||
+                url.contains('1982') ||
+                url.contains('1981') ||
+                url.contains('1980') ||
+                url.contains('1979')) {
+              if (i + 1 < cells.length) {
+                award['Prêmio'] = cells[i + 1].text;
+              }
+
+              if (i + 2 < cells.length) {
+                award['Cidade - Estado'] = cells[i + 2].text;
+              }
             }
 
             obmAwards.add(award);
@@ -126,27 +197,36 @@ class Data {
     final List<Map<String, String>> obcAwards = [];
 
     final paragraphs = document.querySelectorAll('.main-wrap .paragraph');
+    print("ENTROU ENTROUENTROUENTROU ENTROUENTROU ENTROU");
 
     for (final paragraph in paragraphs) {
-      final studentNames = paragraph.querySelectorAll('strong');
-      for (final name in studentNames) {
-        if (name.text.contains(studentName)) {
+      final brTags = paragraph.querySelectorAll('br');
+      for (final brTag in brTags) {
+        final studentNameTag = brTag.parent;
+        if (studentNameTag!.text.contains(studentName)) {
           final award = <String, String>{};
 
-          award['Nome'] = studentName;
+          award['Nome'] = brTag.text.trim(); // Armazena o nome completo
+          print(award);
 
           final h2 = paragraph.previousElementSibling?.previousElementSibling;
           if (h2 != null) {
-            final medalha = h2.text.trim();
-            if (medalha == 'Medalhas de Bronze' ||
-                medalha == 'Medalhas de Prata' ||
-                medalha == 'Medalhas de Ouro' ||
-                medalha == 'Menções Honrosas') {
-              award['Medalha'] = medalha;
+            final medalhaText = h2.text.trim().toLowerCase();
+            if (medalhaText.contains('ouro')) {
+              award['Medalha'] = 'Ouro';
+            } else if (medalhaText.contains('prata')) {
+              award['Medalha'] = 'Prata';
+            } else if (medalhaText.contains('bronze')) {
+              award['Medalha'] = 'Bronze';
+            } else if (medalhaText.contains('honrosas')) {
+              award['Medalha'] = 'Menções Honrosas';
             }
           }
 
-          obcAwards.add(award);
+          if (award.containsKey('Medalha')) {
+            obcAwards.add(award);
+            // Não há mais break aqui para continuar procurando medalhas para o mesmo aluno
+          }
         }
       }
     }
@@ -155,7 +235,7 @@ class Data {
   }
 }
 
-// Classe para criar PDF
+// Classe para criar PDF, mudar de lugar depois
 class PdfCreator {
   static Future<File> generatePdf(String text) async {
     final pdf = pdfLib.Document();
@@ -174,96 +254,5 @@ class PdfCreator {
     await file.writeAsBytes(await pdf.save());
 
     return file;
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-//Classe de interface para teste, apagar futuramente
-class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController textEditingController = TextEditingController();
-  Data data = Data();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Enter the student name:',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: textEditingController,
-                decoration: InputDecoration(
-                  hintText: 'Type here',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  await data.fetchObmData(textEditingController.text);
-                  await data.fetchObcData(textEditingController.text);
-                  setState(() {});
-                },
-                child: Text('Submit'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  final file = await PdfCreator.generatePdf(
-                      '${data.obm_result}\n${data.obc_result}');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('PDF saved as ${file.path}')),
-                  );
-                },
-                child: const Text('Export to PDF'),
-              ),
-              const SizedBox(height: 16),
-              if (data.obm_result.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('OBM Result:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Text(data.obm_result),
-                      ),
-                    ),
-                  ],
-                ),
-              if (data.obc_result.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('OBC Result:',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Text(data.obc_result),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

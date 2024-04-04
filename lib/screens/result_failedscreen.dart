@@ -36,7 +36,7 @@ class _ResultFailedScreenState extends State<ResultFailedScreen> {
                   right: 36.h,
                 ),
               ),
-              SizedBox(height: 57.v),
+              SizedBox(height: 37.v),
               Container(
                 width: 359.h,
                 margin: EdgeInsets.only(
@@ -44,10 +44,10 @@ class _ResultFailedScreenState extends State<ResultFailedScreen> {
                   right: 27.h,
                 ),
                 child: FittedBox(
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fitHeight,
                   child: Text(
                     "Aluno(a): \n${widget.searchTerm}",
-                    overflow: TextOverflow.visible,
+                    overflow: TextOverflow.clip,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.displayMedium,
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:BOOC/core/app_export.dart';
 
 // Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
+
 class ResultFoundScreen extends StatelessWidget {
   final String obmawards;
   final String obcawards;
@@ -16,6 +17,9 @@ class ResultFoundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> obmResultContainers = _buildResultContainers(obmawards);
+    List<Widget> obcResultContainers = _buildResultContainers(obcawards);
+
     return SafeArea(
       child: Scaffold(
         body: SizedBox(
@@ -23,13 +27,20 @@ class ResultFoundScreen extends StatelessWidget {
           child: Column(
             children: [
               _buildTwentyTwo(context),
-              SizedBox(height: 35.v),
-              _buildFlexibleSizedbox(context),
-              SizedBox(height: 96.v),
-              Divider(
-                color: appTheme.gray300,
+              SizedBox(height: 15.v),
+              Expanded(
+                child: PageView(
+                  children: [
+                    for (Widget container in obmResultContainers) container,
+                    for (Widget container in obcResultContainers) container,
+                  ],
+                ),
               ),
-              SizedBox(height: 50.v),
+              SizedBox(height: 26.v),
+              Divider(
+                color: Colors.grey[300],
+              ),
+              SizedBox(height: 10.v),
               Padding(
                 padding: EdgeInsets.only(
                   left: 60.h,
@@ -79,10 +90,183 @@ class ResultFoundScreen extends StatelessWidget {
     );
   }
 
-  /// Section Widget
+  List<Widget> _buildResultContainers(String awardsString) {
+    if (awardsString.trim() == 'Aluno não encontrado') {
+      return [];
+    }
+
+    List<Widget> resultContainers = [];
+    List<String> occurrences = awardsString.split('}, {');
+
+    for (var occurrence in occurrences) {
+      // Limpeza da string para remover { e }
+      occurrence = occurrence.replaceAll('{', '').replaceAll('}', '');
+      Map<String, String> parsedAward = _parseAward(occurrence);
+      if (parsedAward.isNotEmpty) {
+        resultContainers.add(_buildResultContainer(parsedAward));
+      }
+    }
+
+    return resultContainers;
+  }
+
+  Widget _buildResultContainer(Map<String, String> parsedAward) {
+    String awardType = '';
+    String awardYear = '';
+
+    // Verificar se a URL contém um ano de 4 algarismos
+    RegExp regex = RegExp(r'\b\d{4}\b');
+    Iterable<Match> matches = regex.allMatches(parsedAward['URL'] ?? '');
+
+    if (matches.isNotEmpty) {
+      awardYear = matches.first.group(0) ?? '';
+    }
+
+    if (parsedAward['URL']?.contains('obm') == true) {
+      awardType = 'OBM';
+    } else if (parsedAward['URL']?.contains('obciencias') == true) {
+      awardType = 'OBC';
+    }
+
+    String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
+
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 24.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: 19.h,
+          vertical: 20.v,
+        ),
+        decoration: AppDecoration.outlineGray70001.copyWith(
+          borderRadius: BorderRadiusStyle.roundedBorder10,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              awardTitle,
+              style: CustomTextStyles.headlineSmallGray80001,
+            ),
+            SizedBox(height: 9.v),
+            _buildResultSection(
+              pontuaO: "Nome: ",
+              oneHundredFiftyEight: parsedAward['Nome'] ?? '-',
+            ),
+            SizedBox(height: 10.v),
+            _buildResultSection(
+              pontuaO: "Cidade / Estado:",
+              oneHundredFiftyEight: parsedAward['Cidade - Estado'] ?? '-',
+            ),
+            SizedBox(height: 10.v),
+            _buildResultSection(
+              pontuaO: "Pontuação: ",
+              oneHundredFiftyEight: parsedAward['Pontuação'] ?? '-',
+            ),
+            SizedBox(height: 9.v),
+            _buildResultSection(
+              pontuaO: "Medalha: ",
+              oneHundredFiftyEight: parsedAward['Medalha'] ?? '-',
+            ),
+            SizedBox(height: 9.v),
+            _buildResultSection(
+              pontuaO: "Link: ",
+              oneHundredFiftyEight: parsedAward['URL'] ?? '-',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Map<String, String> _parseAward(String award) {
+    Map<String, String> parsedValues = {};
+
+    // Remover o texto inicial "[Premiações de Carlos Yuzo"
+    int startIndex = award.indexOf('Nome: ');
+    if (startIndex != -1) {
+      award = award.substring(startIndex);
+    }
+
+    // Remover caracteres indesejados no final
+    award = award.replaceAll(RegExp(r'\]\s*$'), '');
+
+    List<String> parts = award.split(', ');
+
+    for (String part in parts) {
+      List<String> keyValue = part.split(': ');
+
+      if (keyValue.length == 2) {
+        String key = keyValue[0].trim();
+        String value = keyValue[1].trim();
+        if (key == 'Prêmio' || key == 'Medalha') {
+          key = 'Medalha'; // Definir a chave como "Medalha"
+        }
+        parsedValues[key] = value;
+      } else if (part.startsWith('Nome')) {
+        // Verificar se a parte começa com "Nome"
+        int index = part.indexOf(': '); // Encontrar o índice de ": "
+        if (index != -1) {
+          // Extrair o valor após "Nome: "
+          String value = part
+              .substring(index + 2)
+              .replaceAll('[', ''); // Remover o '[' do início
+          parsedValues['Nome'] = value;
+        }
+      }
+    }
+
+    print(parsedValues);
+    return parsedValues;
+  }
+
+  Widget _buildResultSection({
+    required String pontuaO,
+    required String oneHundredFiftyEight,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 15.h,
+        vertical: 12.v,
+      ),
+      decoration: AppDecoration.fillPrimary.copyWith(
+        borderRadius: BorderRadiusStyle.roundedBorder10,
+      ),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 4.v),
+            child: Text(
+              pontuaO,
+              style: CustomTextStyles.titleMediumPrimaryContainer.copyWith(
+                color: theme.colorScheme.primaryContainer,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 10.h,
+                top: 2.v,
+              ),
+              child: Text(
+                oneHundredFiftyEight,
+                style: theme.textTheme.titleMedium!.copyWith(
+                  color: appTheme.blue500,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTwentyTwo(BuildContext context) {
     return SizedBox(
-      height: 355.v,
+      height: 305.v,
       width: double.maxFinite,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -166,98 +350,15 @@ class ResultFoundScreen extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(
-              width: 359.h,
-              child: Text(
-                "Aluno(a): \n$searchTerm",
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.displayMedium,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Section Widget
-  Widget _buildFlexibleSizedbox(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24.h),
-      padding: EdgeInsets.symmetric(
-        horizontal: 19.h,
-        vertical: 20.v,
-      ),
-      decoration: AppDecoration.outlineGray70001.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder10,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "OBM - 2022",
-            style: CustomTextStyles.headlineSmallGray80001,
-          ),
-          SizedBox(height: 10.v),
-          _buildMeans(
-            context,
-            pontuaO: "Local de realização:",
-            oneHundredFiftyEight: "Fortaleza - CE",
-          ),
-          SizedBox(height: 10.v),
-          _buildMeans(
-            context,
-            pontuaO: "Pontuação: ",
-            oneHundredFiftyEight: "158",
-          ),
-          SizedBox(height: 9.v),
-          _buildMeans(
-            context,
-            pontuaO: "Medalha: ",
-            oneHundredFiftyEight: "Prata",
-          ),
-          SizedBox(height: 9.v),
-        ],
-      ),
-    );
-  }
-
-  /// Common widget
-  Widget _buildMeans(
-    BuildContext context, {
-    required String pontuaO,
-    required String oneHundredFiftyEight,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 15.h,
-        vertical: 12.v,
-      ),
-      decoration: AppDecoration.fillPrimary.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder10,
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 4.v),
-            child: Text(
-              pontuaO,
-              style: CustomTextStyles.titleMediumPrimaryContainer.copyWith(
-                color: theme.colorScheme.primaryContainer,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: 10.h,
-              top: 2.v,
-            ),
-            child: Text(
-              oneHundredFiftyEight,
-              style: theme.textTheme.titleMedium!.copyWith(
-                color: appTheme.blue500,
+              width: 239.h,
+              child: FittedBox(
+                fit: BoxFit.fitHeight,
+                child: Text(
+                  "Aluno(a): $searchTerm",
+                  overflow: TextOverflow.clip,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.displayMedium,
+                ),
               ),
             ),
           ),
