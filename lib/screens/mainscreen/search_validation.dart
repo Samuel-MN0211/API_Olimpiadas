@@ -19,22 +19,28 @@ class SearchValidation {
         print('ATIVOU ATIVOU ATIVOU OBC');
         await data.fetchObcData(textEditingController.text);
       }
+      if (settingsProvider.isObmepSelected == true) {
+        print('ATIVOU ATIVOU ATIVOU OBMEP');
+        await data.fetchObmepData(textEditingController.text);
+      }
 
       if (data.obm_result == 'Aluno não encontrado\n' &&
-          data.obc_result == '') {
+          data.obc_result == '' &&
+          data.obmep_result == 'Aluno não encontrado\n') {
         Navigator.pushNamed(
           context,
           AppRoutes.result_FailedScreen,
           arguments: textEditingController.text,
         );
       } else if (data.obm_result != 'Aluno não encontrado\n' ||
-          data.obc_result != '') {
+          data.obc_result != '' || data.obmep_result != 'Aluno não encontrado\n') {
         Navigator.pushNamed(
           context,
           AppRoutes.result_FoundScreen,
           arguments: ResultFoundScreenArguments(
             obmawards: data.obm_result,
             obcawards: data.obc_result,
+            obmepAwards: data.obmep_result,
             searchTerm: textEditingController.text,
           ),
         );

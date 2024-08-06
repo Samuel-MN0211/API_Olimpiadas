@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart' as dom;
@@ -9,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 class Data {
   String obm_result = 'Aluno não encontrado\n';
   String obc_result = '';
+  String obmep_result = '';
 
   //Método para buscar URLS desejadas e retornar status da busca da OBM
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
@@ -74,6 +74,34 @@ class Data {
         print('Failed to load data from $url');
       }
     }
+  }
+
+    //Método para buscar URLS desejadas e retornar status da busca da OBMEP
+  //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
+  Future<void> fetchObmepData(String studentName) async {
+    print("Começou OBMEP");
+    const medalhas = ['Ouro', 'Prata', 'Bronze'];
+    for (final medalha in medalhas) {
+      final mainUrl = 'https://premiacao.obmep.org.br/18obmep/verRelatorioPremiados$medalha.do.htm';
+      print(mainUrl);
+      final mainResponse = await http.get(Uri.parse(mainUrl));
+      if (mainResponse.statusCode == 200) {
+        print("200");
+        final mainDocument = parser.parse(mainResponse.body);
+        final List<Map<String, String>> obmepAwards = [];
+        final awards = findObmepAwards(mainDocument, studentName, mainUrl);
+        obmepAwards.addAll(awards);
+        print(obmepAwards);
+        if (obmepAwards.isEmpty) {
+          obmep_result = 'Aluno não encontrado\n';
+        } else {
+          obmep_result = 'Premiações de $studentName $obmepAwards\n';
+        }
+      } else {
+        throw Exception('Failed to load results page');
+      }
+      
+    } 
   }
 
   // Função para percorrer o HTML das urls passadas pela função fetchObmData, e buscar correspondência de nome.
@@ -232,6 +260,44 @@ class Data {
     }
 
     return obcAwards;
+  }
+
+
+// Função para percorrer o HTML das urls passadas pela função fetchObmepData, e buscar correspondência de nome.
+  // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
+  // Ao final armazena todas as informações do mapa no resultado "OBMEP awards" e retorna o resultado
+  List<Map<String, String>> findObmepAwards(
+      dom.Document document, String studentName, String url) {
+    final tables = document.querySelectorAll('table');
+    final List<Map<String, String>> obmepAwards = [];
+    print(studentName);
+    for (final table in tables) {
+      final tbody = table.querySelector('tbody');
+      final rows = tbody?.querySelectorAll('tr');
+
+      if (rows != null) {
+        for (final row in rows) {
+          final cells = row.children;
+          for (int i = 0; i < cells.length; i++) {
+            final cellText = cells[i].text;
+            if (cellText.contains(studentName.toUpperCase())) {
+              final award = <String, String>{};
+
+              award['Nome'] = cellText; // Armazena o nome completo
+              award['URL'] = url; // Armazena a URL
+              award['Escola'] = cells[2].text;
+              award['Cidade - Estado'] = '${cells[3].text} - ${cells[4].text}';
+              award['Medalha'] = cells[6].text;
+
+              obmepAwards.add(award);
+            }
+          }
+        }
+      }
+
+    }
+
+    return obmepAwards;
   }
 }
 

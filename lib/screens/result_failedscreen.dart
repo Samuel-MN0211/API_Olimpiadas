@@ -81,9 +81,8 @@ class _ResultFailedScreenState extends State<ResultFailedScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
+                  shape: CircleBorder(), backgroundColor: appTheme.blueGray700,
                   padding: EdgeInsets.all(20.h),
-                  primary: appTheme.blueGray700,
                 ),
                 child: Icon(Icons.home, color: Colors.white),
               ),

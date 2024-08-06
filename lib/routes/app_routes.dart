@@ -18,6 +18,7 @@ class AppRoutes {
       return ResultFoundScreen(
         obmawards: args.obmawards,
         obcawards: args.obcawards,
+        obmepAwards: args.obmepAwards,
         searchTerm: args.searchTerm,
       );
     },
@@ -43,6 +44,7 @@ class AppRoutes {
             builder: (_) => ResultFoundScreen(
               obmawards: args.obmawards,
               obcawards: args.obcawards,
+              obmepAwards: args.obmepAwards,
               searchTerm: args.searchTerm,
             ),
           );
