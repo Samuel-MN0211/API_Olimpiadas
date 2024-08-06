@@ -130,7 +130,7 @@ class ResultFoundScreen extends StatelessWidget {
     }
     if (parsedAward['URL']?.contains('obmep') == true) {
       awardType = 'OBMEP';
-      awardYear = '18';
+      awardYear = 'Edição 18';
     } else if (parsedAward['URL']?.contains('obm') == true) {
       awardType = 'OBM';
     } else if (parsedAward['URL']?.contains('obciencias') == true) {
@@ -138,8 +138,6 @@ class ResultFoundScreen extends StatelessWidget {
     } 
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
-
-    print(awardTitle);
 
     return SingleChildScrollView(
       child: Container(

@@ -80,18 +80,15 @@ class Data {
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmepData(String studentName) async {
     print("Começou OBMEP");
-    const medalhas = ['Ouro', 'Prata', 'Bronze'];
+    const medalhas = ['Bronze', 'Prata', 'Ouro'];
     for (final medalha in medalhas) {
       final mainUrl = 'https://premiacao.obmep.org.br/18obmep/verRelatorioPremiados$medalha.do.htm';
-      print(mainUrl);
       final mainResponse = await http.get(Uri.parse(mainUrl));
       if (mainResponse.statusCode == 200) {
-        print("200");
         final mainDocument = parser.parse(mainResponse.body);
         final List<Map<String, String>> obmepAwards = [];
         final awards = findObmepAwards(mainDocument, studentName, mainUrl);
         obmepAwards.addAll(awards);
-        print(obmepAwards);
         if (obmepAwards.isEmpty) {
           obmep_result = 'Aluno não encontrado\n';
         } else {
@@ -270,7 +267,6 @@ class Data {
       dom.Document document, String studentName, String url) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmepAwards = [];
-    print(studentName);
     for (final table in tables) {
       final tbody = table.querySelector('tbody');
       final rows = tbody?.querySelectorAll('tr');
@@ -286,7 +282,7 @@ class Data {
               award['Nome'] = cellText; // Armazena o nome completo
               award['URL'] = url; // Armazena a URL
               award['Escola'] = cells[2].text;
-              award['Cidade - Estado'] = '${cells[3].text} - ${cells[4].text}';
+              award['Cidade - Estado'] = '${cells[4].text} - ${cells[5].text}';
               award['Medalha'] = cells[6].text;
 
               obmepAwards.add(award);
