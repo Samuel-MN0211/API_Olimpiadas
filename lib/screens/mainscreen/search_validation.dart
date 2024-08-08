@@ -25,7 +25,7 @@ class SearchValidation {
       }
 
       if (data.obm_result == 'Aluno não encontrado\n' &&
-          data.obc_result == '' &&
+          data.obc_result == 'Aluno não encontrado\n' &&
           data.obmep_result == 'Aluno não encontrado\n') {
         Navigator.pushNamed(
           context,
@@ -33,7 +33,8 @@ class SearchValidation {
           arguments: textEditingController.text,
         );
       } else if (data.obm_result != 'Aluno não encontrado\n' ||
-          data.obc_result != '' || data.obmep_result != 'Aluno não encontrado\n') {
+          data.obc_result != 'Aluno não encontrado\n' ||
+          data.obmep_result != 'Aluno não encontrado\n') {
         Navigator.pushNamed(
           context,
           AppRoutes.result_FoundScreen,

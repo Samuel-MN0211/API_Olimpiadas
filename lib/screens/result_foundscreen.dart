@@ -154,7 +154,7 @@ class ResultFoundScreen extends StatelessWidget {
       awardType = 'OBM';
     } else if (parsedAward['URL']?.contains('obciencias') == true) {
       awardType = 'OBC';
-    } 
+    }
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
 

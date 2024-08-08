@@ -49,6 +49,7 @@ class Data {
   // Possui um array de URLs pois ao contrário da OBM, as urls de premiação não estão todas contidas no HTML de uma página de diretório superior
   //Dentro do corpo chama função para percorrer o HTML das URLs do array com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObcData(String studentName) async {
+    print('Começou OBC');
     final List<String> urls = [
       'http://www.obciencias.com.br/resultados-2023.html',
       'http://www.obciencias.com.br/resultados-2022.html',
@@ -67,22 +68,31 @@ class Data {
     for (final url in urls) {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
+        print("GET SUCESSO");
         final document = parser.parse(response.body);
-        final awards = findObcAwards(document, studentName);
+        final awards = findObcAwards(document, studentName, url);
         obcAwards.addAll(awards);
       } else {
         print('Failed to load data from $url');
       }
     }
+
+    if (obcAwards.isEmpty) {
+      obc_result = 'Aluno não encontrado\n';
+    } else {
+      obc_result = 'Premiações de $studentName $obcAwards\n';
+      print(obc_result);
+    }
   }
 
-    //Método para buscar URLS desejadas e retornar status da busca da OBMEP
+  //Método para buscar URLS desejadas e retornar status da busca da OBMEP
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmepData(String studentName) async {
     print("Começou OBMEP");
     const medalhas = ['Bronze', 'Prata', 'Ouro'];
     for (final medalha in medalhas) {
-      final mainUrl = 'https://premiacao.obmep.org.br/18obmep/verRelatorioPremiados$medalha.do.htm';
+      final mainUrl =
+          'https://premiacao.obmep.org.br/18obmep/verRelatorioPremiados$medalha.do.htm';
       final mainResponse = await http.get(Uri.parse(mainUrl));
       if (mainResponse.statusCode == 200) {
         final mainDocument = parser.parse(mainResponse.body);
@@ -97,8 +107,7 @@ class Data {
       } else {
         throw Exception('Failed to load results page');
       }
-      
-    } 
+    }
   }
 
   // Função para percorrer o HTML das urls passadas pela função fetchObmData, e buscar correspondência de nome.
@@ -108,7 +117,6 @@ class Data {
       dom.Document document, String studentName, String url) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmAwards = [];
-    print(' ENTROUENTROUENTROUENTROUENTROU');
 
     for (final table in tables) {
       final rows = table.querySelectorAll('tr');
@@ -202,6 +210,9 @@ class Data {
               if (i + 2 < cells.length) {
                 award['Cidade - Estado'] = cells[i + 2].text;
               }
+              if (i + 3 < cells.length) {
+                award['Escola'] = cells[i + 3].text;
+              }
             }
 
             obmAwards.add(award);
@@ -214,90 +225,99 @@ class Data {
   }
 
   // Função para percorrer o HTML das urls passadas pela função fetchObcData, e buscar correspondência de nome.
-  // Ao encontrar correspondência, armazena valores referentes a premiação  em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
-  // Como a OBC não possui uma estrutura de premiação tão bem definida quanto a OBM, a função busca por medalhas de bronze, prata, ouro e menções honrosas
+  // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
   // Ao final armazena todas as informações do mapa no resultado "OBC awards" e retorna o resultado
+
   List<Map<String, String>> findObcAwards(
-      dom.Document document, String studentName) {
+      dom.Document document, String studentName, String url) {
+    print('Entrou OBC awards');
     final List<Map<String, String>> obcAwards = [];
 
-    final paragraphs = document.querySelectorAll('.main-wrap .paragraph');
-    print("ENTROU ENTROUENTROUENTROU ENTROUENTROU ENTROU");
+    // Encontra todos os parágrafos
+    final paragraphs = document.querySelectorAll('div.paragraph');
 
     for (final paragraph in paragraphs) {
-      final brTags = paragraph.querySelectorAll('br');
-      for (final brTag in brTags) {
-        final studentNameTag = brTag.parent;
-        if (studentNameTag!.text.contains(studentName)) {
-          final award = <String, String>{};
+      final allText = paragraph.text.trim(); // Captura todo o texto da div
 
-          award['Nome'] = brTag.text.trim(); // Armazena o nome completo
-          print(award);
+      if (allText.contains(studentName)) {
+        print('Nome do aluno encontrado: $studentName');
 
-          final h2 = paragraph.previousElementSibling?.previousElementSibling;
-          if (h2 != null) {
-            final medalhaText = h2.text.trim().toLowerCase();
-            if (medalhaText.contains('ouro')) {
-              award['Medalha'] = 'Ouro';
-            } else if (medalhaText.contains('prata')) {
-              award['Medalha'] = 'Prata';
-            } else if (medalhaText.contains('bronze')) {
-              award['Medalha'] = 'Bronze';
-            } else if (medalhaText.contains('honrosas')) {
-              award['Medalha'] = 'Menções Honrosas';
-            }
+        final award = <String, String>{};
+        award['Nome'] = studentName;
+        award['URL'] = url; // Armazena a URL onde a premiação foi encontrada
+
+        // Identifica a medalha com base no texto do elemento <h2> anterior
+        final h2 = paragraph.previousElementSibling;
+        if (h2 != null && h2.localName == 'h2') {
+          final medalhaText = h2.text.trim();
+
+          if (medalhaText.contains('Ouro')) {
+            award['Medalha'] = 'Ouro';
+          } else if (medalhaText.contains('Prata')) {
+            award['Medalha'] = 'Prata';
+          } else if (medalhaText.contains('Bronze')) {
+            award['Medalha'] = 'Bronze';
+          } else if (medalhaText.contains('Honrosa')) {
+            award['Medalha'] = 'Menção Honrosa';
           }
+        }
 
-          if (award.containsKey('Medalha')) {
-            obcAwards.add(award);
-            // Não há mais break aqui para continuar procurando medalhas para o mesmo aluno
-          }
+        if (award.containsKey('Medalha')) {
+          obcAwards.add(award);
+          print('Premiação adicionada: $award'); // Imprime o prêmio adicionado
         }
       }
     }
-
+    print(obcAwards);
     return obcAwards;
   }
 
-
-// Função para percorrer o HTML das urls passadas pela função fetchObmepData, e buscar correspondência de nome.
+  // Função para percorrer o HTML das urls passadas pela função fetchObmepData, e buscar correspondência de nome.
   // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
   // Ao final armazena todas as informações do mapa no resultado "OBMEP awards" e retorna o resultado
   List<Map<String, String>> findObmepAwards(
       dom.Document document, String studentName, String url) {
     final tables = document.querySelectorAll('table');
     final List<Map<String, String>> obmepAwards = [];
+
     for (final table in tables) {
-      final tbody = table.querySelector('tbody');
-      final rows = tbody?.querySelectorAll('tr');
+      final rows = table.querySelectorAll('tr');
 
-      if (rows != null) {
-        for (final row in rows) {
-          final cells = row.children;
-          for (int i = 0; i < cells.length; i++) {
-            final cellText = cells[i].text;
-            if (cellText.contains(studentName.toUpperCase())) {
-              final award = <String, String>{};
+      for (final row in rows) {
+        final cells = row.children;
+        for (int i = 0; i < cells.length; i++) {
+          final cellText = cells[i].text;
+          if (cellText.contains(studentName)) {
+            final award = <String, String>{};
 
-              award['Nome'] = cellText; // Armazena o nome completo
-              award['URL'] = url; // Armazena a URL
-              award['Escola'] = cells[2].text;
-              award['Cidade - Estado'] = '${cells[4].text} - ${cells[5].text}';
-              award['Medalha'] = cells[6].text;
+            award['Nome'] = cellText; // Armazena o nome completo
+            award['URL'] = url; // Armazena a URL
 
-              obmepAwards.add(award);
+            if (url.contains('Ouro')) {
+              if (i + 1 < cells.length) {
+                award['Medalha'] = 'Ouro';
+              }
+            } else if (url.contains('Prata')) {
+              if (i + 1 < cells.length) {
+                award['Medalha'] = 'Prata';
+              }
+            } else if (url.contains('Bronze')) {
+              if (i + 1 < cells.length) {
+                award['Medalha'] = 'Bronze';
+              }
             }
+
+            obmepAwards.add(award);
           }
         }
       }
-
     }
 
     return obmepAwards;
   }
 }
 
-// Classe para criar PDF, mudar de lugar depois
+//Função para gerar o PDF. O texto passado para a função será o conteúdo do PDF gerado.
 class PdfCreator {
   static Future<File> generatePdf(String text) async {
     final pdf = pdfLib.Document();
