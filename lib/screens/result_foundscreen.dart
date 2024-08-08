@@ -42,41 +42,60 @@ class ResultFoundScreen extends StatelessWidget {
               ),
               SizedBox(height: 10.v),
               Padding(
-                padding: EdgeInsets.only(
-                  left: 60.h,
-                  right: 46.h,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 30.h, vertical: 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 1.v),
-                      child: CustomIconButton(
-                        height: 68.adaptSize,
-                        width: 68.adaptSize,
-                        padding: EdgeInsets.all(12.h),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgHome,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 1.v, right: 5.h),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AppRoutes.mainScreen,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 12.v,
+                              horizontal: 15.h,
+                            ),
+                            primary: appTheme.blueGray700,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: Icon(Icons.search, color: Colors.white),
+                          label: Text(
+                            "Realizar outra busca",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 1.v),
-                      child: CustomIconButton(
-                        height: 67.adaptSize,
-                        width: 67.adaptSize,
-                        padding: EdgeInsets.all(11.h),
-                        child: CustomImageView(
-                          imagePath: ImageConstant.imgVectorBlueGray700,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 1.v, left: 5.h),
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            // Adicione a lógica para exportar para PDF aqui
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 12.v,
+                              horizontal: 15.h,
+                            ),
+                            primary: appTheme.blueGray700,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          icon: Icon(Icons.picture_as_pdf, color: Colors.white),
+                          label: Text(
+                            "Exportar para PDF",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    ),
-                    CustomIconButton(
-                      height: 67.adaptSize,
-                      width: 67.adaptSize,
-                      padding: EdgeInsets.all(10.h),
-                      child: CustomImageView(
-                        imagePath: ImageConstant.imgGridiconsCustomize,
                       ),
                     ),
                   ],
@@ -254,7 +273,7 @@ class ResultFoundScreen extends StatelessWidget {
                 style: theme.textTheme.titleMedium!.copyWith(
                   color: appTheme.blue500,
                 ),
-                maxLines: 2,
+                maxLines: 4,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
