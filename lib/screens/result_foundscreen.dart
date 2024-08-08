@@ -6,12 +6,14 @@ import 'package:BOOC/core/app_export.dart';
 class ResultFoundScreen extends StatelessWidget {
   final String obmawards;
   final String obcawards;
+  final String obmepAwards;
   final String searchTerm;
 
   const ResultFoundScreen({
     Key? key,
     required this.obmawards,
     required this.obcawards,
+    required this.obmepAwards,
     required this.searchTerm,
   }) : super(key: key);
 
@@ -19,6 +21,7 @@ class ResultFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> obmResultContainers = _buildResultContainers(obmawards);
     List<Widget> obcResultContainers = _buildResultContainers(obcawards);
+    List<Widget> obmepResultContainers = _buildResultContainers(obmepAwards);
 
     return SafeArea(
       child: Scaffold(
@@ -33,6 +36,7 @@ class ResultFoundScreen extends StatelessWidget {
                   children: [
                     for (Widget container in obmResultContainers) container,
                     for (Widget container in obcResultContainers) container,
+                    for (Widget container in obmepResultContainers) container,
                   ],
                 ),
               ),
@@ -117,6 +121,9 @@ class ResultFoundScreen extends StatelessWidget {
     List<Widget> resultContainers = [];
     List<String> occurrences = awardsString.split('}, {');
 
+    print("BUILDING");
+    print(occurrences);
+
     for (var occurrence in occurrences) {
       // Limpeza da string para remover { e }
       occurrence = occurrence.replaceAll('{', '').replaceAll('}', '');
@@ -140,12 +147,14 @@ class ResultFoundScreen extends StatelessWidget {
     if (matches.isNotEmpty) {
       awardYear = matches.first.group(0) ?? '';
     }
-
-    if (parsedAward['URL']?.contains('obm') == true) {
+    if (parsedAward['URL']?.contains('obmep') == true) {
+      awardType = 'OBMEP';
+      awardYear = 'Edição 18';
+    } else if (parsedAward['URL']?.contains('obm') == true) {
       awardType = 'OBM';
     } else if (parsedAward['URL']?.contains('obciencias') == true) {
       awardType = 'OBC';
-    }
+    } 
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
 
@@ -235,7 +244,6 @@ class ResultFoundScreen extends StatelessWidget {
       }
     }
 
-    print(parsedValues);
     return parsedValues;
   }
 

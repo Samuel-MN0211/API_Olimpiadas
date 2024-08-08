@@ -2,11 +2,13 @@
 class ResultFoundScreenArguments {
   final String obmawards;
   final String obcawards;
+  final String obmepAwards;
   final String searchTerm;
 
   ResultFoundScreenArguments({
     required this.obmawards,
     required this.obcawards,
+    required this.obmepAwards,
     required this.searchTerm,
   });
 }

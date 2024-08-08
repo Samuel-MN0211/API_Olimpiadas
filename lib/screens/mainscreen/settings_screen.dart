@@ -47,6 +47,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                     },
                   ),
+                  CheckboxListTile(
+                    title: Text('OBMEP'),
+                    value: settingsProvider
+                        .isObmepSelected, // Use o provider para obter o estado do checkbox
+                    onChanged: (value) {
+                      setState(() {
+                        settingsProvider
+                            .toggleObmep(); // Use o provider para alternar o estado do checkbox
+                      });
+                    },
+                  ),
                 ],
               );
             },
