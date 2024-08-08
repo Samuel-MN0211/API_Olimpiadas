@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class SettingsProvider extends ChangeNotifier {
   bool isObmSelected = true;
   bool isObcSelected = true;
+  bool isObiSelected = true;
   bool isObmepSelected = true;
   bool isObiSelected = true;
   int? startYear;
