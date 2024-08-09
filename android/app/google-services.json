@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770959535744",
+    "project_id": "booc-5aca6",
+    "storage_bucket": "booc-5aca6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770959535744:android:7b01acbb9175108f7e0065",
+        "android_client_info": {
+          "package_name": "com.example.teste_olimpiadas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsMX0Qra-ManvaelfRcmUIm0-_pgNMElY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
