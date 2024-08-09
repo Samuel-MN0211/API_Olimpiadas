@@ -23,8 +23,8 @@ class ResultFoundScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> obmResultContainers = _buildResultContainers(obmawards);
     List<Widget> obcResultContainers = _buildResultContainers(obcawards);
-    List<Widget> obmepResultContainers = _buildResultContainers(obmepAwards);
     List<Widget> obiResultContainers = _buildResultContainers(obiAwards);
+    List<Widget> obmepResultContainers = _buildResultContainers(obmepAwards);
 
     return SafeArea(
       child: Scaffold(
@@ -39,6 +39,7 @@ class ResultFoundScreen extends StatelessWidget {
                   children: [
                     for (Widget container in obmResultContainers) container,
                     for (Widget container in obcResultContainers) container,
+                    for (Widget container in obiResultContainers) container,
                     for (Widget container in obmepResultContainers) container,
                     for (Widget container in obiResultContainers) container,
                   ],
@@ -67,8 +68,7 @@ class ResultFoundScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                               vertical: 12.v,
                               horizontal: 15.h,
-                            ),
-                            primary: appTheme.blueGray700,
+                            ), backgroundColor: appTheme.blueGray700,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -92,8 +92,7 @@ class ResultFoundScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                               vertical: 12.v,
                               horizontal: 15.h,
-                            ),
-                            primary: appTheme.blueGray700,
+                            ), backgroundColor: appTheme.blueGray700,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -160,7 +159,7 @@ class ResultFoundScreen extends StatelessWidget {
       awardType = 'OBC';
     } else if (parsedAward['URL']?.contains('obi') == true) {
       awardType = 'OBI';
-    }
+    } 
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
 

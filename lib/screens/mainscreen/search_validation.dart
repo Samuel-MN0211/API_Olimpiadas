@@ -23,12 +23,12 @@ class SearchValidation {
         await data.fetchObiData(textEditingController.text);
       }
       if (settingsProvider.isObmepSelected == true) {
-        print('ATIVOU ATIVOU ATIVOU OBMEP');
         await data.fetchObmepData(textEditingController.text);
       }
 
       if (data.obm_result == 'Aluno não encontrado\n' &&
           data.obc_result == 'Aluno não encontrado\n' &&
+          data.obi_result == 'Aluno não encontrado\n' &&
           data.obmep_result == 'Aluno não encontrado\n') {
         Navigator.pushNamed(
           context,
