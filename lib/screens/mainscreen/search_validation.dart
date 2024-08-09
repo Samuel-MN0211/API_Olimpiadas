@@ -13,7 +13,7 @@ class SearchValidation {
       textEditingController.text = validatedText;
       if (settingsProvider.isObmSelected == true) {
         print('ATIVOU ATIVOU ATIVOU OBM');
-        await data.fetchObmData(textEditingController.text);
+        await data.fetchObmData(textEditingController.text, settingsProvider);
       }
       if (settingsProvider.isObcSelected == true) {
         print('ATIVOU ATIVOU ATIVOU OBC');

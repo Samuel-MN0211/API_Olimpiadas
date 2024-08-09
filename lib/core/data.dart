@@ -4,6 +4,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:pdf/widgets.dart' as pdfLib;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:BOOC/core/app_export.dart';
 
 class Data {
   String obm_result = 'Aluno não encontrado\n';
@@ -12,7 +13,10 @@ class Data {
 
   //Método para buscar URLS desejadas e retornar status da busca da OBM
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
-  Future<void> fetchObmData(String studentName) async {
+  Future<void> fetchObmData(
+      String studentName, SettingsProvider settingsProvider) async {
+    final startYear = settingsProvider.startYear;
+    final endYear = settingsProvider.endYear;
     const mainUrl = 'https://www.obm.org.br/quem-somos/premiados-da-obm/';
     final mainResponse = await http.get(Uri.parse(mainUrl));
     if (mainResponse.statusCode == 200) {
@@ -24,14 +28,17 @@ class Data {
 
       for (final subUrlElement in subUrls) {
         final subUrl = subUrlElement.attributes['href'];
-        final subResponse = await http.get(Uri.parse(subUrl!));
-        if (subResponse.statusCode == 200) {
-          final subDocument = parser.parse(subResponse.body);
-          final awards = findObmAwards(subDocument, studentName, subUrl);
-          obmAwards.addAll(awards);
-          print(obmAwards);
-        } else {
-          print('Failed to load data from $subUrl');
+
+        // Verifica se a URL contém um ano entre startYear e endYear
+        if (subUrl != null && shouldCheckUrl(subUrl, startYear, endYear)) {
+          final subResponse = await http.get(Uri.parse(subUrl));
+          if (subResponse.statusCode == 200) {
+            final subDocument = parser.parse(subResponse.body);
+            final awards = findObmAwards(subDocument, studentName, subUrl);
+            obmAwards.addAll(awards);
+          } else {
+            print('Failed to load data from $subUrl');
+          }
         }
       }
 
@@ -43,6 +50,23 @@ class Data {
     } else {
       throw Exception('Failed to load main page');
     }
+  }
+
+  bool shouldCheckUrl(String url, int? startYear, int? endYear) {
+    if (startYear == null || endYear == null) {
+      // Se qualquer um dos anos for nulo, verificar todas as URLs
+      return true;
+    }
+
+    // Extrair o ano da URL
+    final yearMatch = RegExp(r'\d{4}').firstMatch(url);
+    if (yearMatch != null) {
+      final year = int.parse(yearMatch.group(0)!);
+      // Verificar se o ano está no intervalo definido por startYear e endYear
+      return year >= startYear && year <= endYear;
+    }
+
+    return false; // Se a URL não contém ano, pular
   }
 
   //Método para buscar URLS desejadas e retornar status da busca da OBC
