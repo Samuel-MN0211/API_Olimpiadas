@@ -112,6 +112,27 @@ class Data {
 
   //Método para buscar URLS desejadas e retornar status da busca da OBMEP
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
+  Future<void> fetchObiData(String studentName) async {
+    print("Começou OBI");
+    final mainUrl = 'https://olimpiada.ic.unicamp.br/passadas/OBI2023/qmerito/ps/';
+    final mainResponse = await http.get(Uri.parse(mainUrl));
+    if (mainResponse.statusCode == 200) {
+      final mainDocument = parser.parse(mainResponse.body);
+      final List<Map<String, String>> obiAwards = [];
+      final awards = findObiAwards(mainDocument, studentName, mainUrl);
+      obiAwards.addAll(awards);
+      if (obiAwards.isEmpty) {
+        obi_result = 'Aluno não encontrado\n';
+      } else {
+        obi_result = 'Premiações de $studentName $obiAwards\n';
+      }
+    } else {
+      throw Exception('Failed to load results page');
+    }
+  }
+
+    //Método para buscar URLS desejadas e retornar status da busca da OBMEP
+  //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmepData(String studentName) async {
     print("Começou OBMEP");
     const medalhas = ['Bronze', 'Prata', 'Ouro'];
@@ -135,26 +156,7 @@ class Data {
     }
   }
 
-  Future<void> fetchObiData(String studentName) async {
-    print("Começou OBI");
-    final mainUrl =
-        'https://olimpiada.ic.unicamp.br/passadas/OBI2023/qmerito/ps/';
-    final mainResponse = await http.get(Uri.parse(mainUrl));
-    if (mainResponse.statusCode == 200) {
-      final mainDocument = parser.parse(mainResponse.body);
-      final List<Map<String, String>> obiAwards = [];
-      final awards = findObiAwards(mainDocument, studentName, mainUrl);
-      obiAwards.addAll(awards);
-      if (obiAwards.isEmpty) {
-        obi_result = 'Aluno não encontrado\n';
-      } else {
-        obi_result = 'Premiações de $studentName $obiAwards\n';
-      }
-    } else {
-      throw Exception('Failed to load results page');
-    }
-  }
-
+  //Método responsável por fazer match das URLs de imagem das medalhas OBI pela a premiação correspondente
   String parseObiMedalCell(String cellText) {
     final medalMap = {
       'ouro': 'Ouro',
@@ -162,8 +164,6 @@ class Data {
       'bronze': 'Bronze',
       'HM': 'Honra ao Mérito',
     };
-
-    print(cellText);
 
     for (var key in medalMap.keys) {
       if (cellText.contains(key)) {
@@ -174,9 +174,9 @@ class Data {
     return '-';
   }
 
-// Função para percorrer o HTML das urls passadas pela função fetchObmepData, e buscar correspondência de nome.
+  // Função para percorrer o HTML das urls passadas pela função fetchObiData, e buscar correspondência de nome.
   // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
-  // Ao final armazena todas as informações do mapa no resultado "OBMEP awards" e retorna o resultado
+  // Ao final armazena todas as informações do mapa no resultado "OBI awards" e retorna o resultado
   List<Map<String, String>> findObiAwards(
       dom.Document document, String studentName, String url) {
     final tables = document.querySelectorAll('table');
@@ -193,7 +193,7 @@ class Data {
             if (cellText.toLowerCase().contains(studentName.toLowerCase())) {
               final award = <String, String>{};
 
-              award['Nome'] = cellText; // Armazena o nome completo
+              award['Nome'] = cells[3].text; // Armazena o nome completo
               award['URL'] = url; // Armazena a URL
               award['Escola'] = cells[4].text;
               award['Pontuação'] = cells[2].text;
@@ -417,7 +417,8 @@ class Data {
   }
 }
 
-//Função para gerar o PDF. O texto passado para a função será o conteúdo do PDF gerado.
+
+// Classe para criar PDF, mudar de lugar depois
 class PdfCreator {
   static Future<File> generatePdf(String text) async {
     final pdf = pdfLib.Document();
