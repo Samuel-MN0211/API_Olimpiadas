@@ -6,6 +6,7 @@ import 'package:BOOC/core/app_export.dart';
 class ResultFoundScreen extends StatelessWidget {
   final String obmawards;
   final String obcawards;
+  final String obiAwards;
   final String obmepAwards;
   final String searchTerm;
 
@@ -13,6 +14,7 @@ class ResultFoundScreen extends StatelessWidget {
     Key? key,
     required this.obmawards,
     required this.obcawards,
+    required this.obiAwards,
     required this.obmepAwards,
     required this.searchTerm,
   }) : super(key: key);
@@ -22,6 +24,7 @@ class ResultFoundScreen extends StatelessWidget {
     List<Widget> obmResultContainers = _buildResultContainers(obmawards);
     List<Widget> obcResultContainers = _buildResultContainers(obcawards);
     List<Widget> obmepResultContainers = _buildResultContainers(obmepAwards);
+    List<Widget> obiResultContainers = _buildResultContainers(obiAwards);
 
     return SafeArea(
       child: Scaffold(
@@ -37,6 +40,7 @@ class ResultFoundScreen extends StatelessWidget {
                     for (Widget container in obmResultContainers) container,
                     for (Widget container in obcResultContainers) container,
                     for (Widget container in obmepResultContainers) container,
+                    for (Widget container in obiResultContainers) container,
                   ],
                 ),
               ),
@@ -154,6 +158,8 @@ class ResultFoundScreen extends StatelessWidget {
       awardType = 'OBM';
     } else if (parsedAward['URL']?.contains('obciencias') == true) {
       awardType = 'OBC';
+    } else if (parsedAward['URL']?.contains('obi') == true) {
+      awardType = 'OBI';
     }
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';

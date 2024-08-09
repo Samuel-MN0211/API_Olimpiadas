@@ -19,6 +19,9 @@ class SearchValidation {
         print('ATIVOU ATIVOU ATIVOU OBC');
         await data.fetchObcData(textEditingController.text);
       }
+      if (settingsProvider.isObiSelected == true) {
+        await data.fetchObiData(textEditingController.text);
+      }
       if (settingsProvider.isObmepSelected == true) {
         print('ATIVOU ATIVOU ATIVOU OBMEP');
         await data.fetchObmepData(textEditingController.text);
@@ -41,6 +44,7 @@ class SearchValidation {
           arguments: ResultFoundScreenArguments(
             obmawards: data.obm_result,
             obcawards: data.obc_result,
+            obiAwards: data.obi_result,
             obmepAwards: data.obmep_result,
             searchTerm: textEditingController.text,
           ),
@@ -56,6 +60,12 @@ class SearchValidation {
       Data data) async {
     String validatedText =
         TextValidation.validateText(context, textEditingController);
+
+    if (validatedText.isEmpty) {
+      print("Busca bloqueada: números no texto");
+      return; // Bloqueia a busca
+    }
+
     await validateAndNavigate(
         context, validatedText, textEditingController, settingsProvider, data);
   }

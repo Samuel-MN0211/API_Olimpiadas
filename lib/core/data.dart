@@ -9,6 +9,7 @@ import 'package:BOOC/core/app_export.dart';
 class Data {
   String obm_result = 'Aluno não encontrado\n';
   String obc_result = '';
+  String obi_result = '';
   String obmep_result = '';
 
   //Método para buscar URLS desejadas e retornar status da busca da OBM
@@ -132,6 +133,81 @@ class Data {
         throw Exception('Failed to load results page');
       }
     }
+  }
+
+  Future<void> fetchObiData(String studentName) async {
+    print("Começou OBI");
+    final mainUrl =
+        'https://olimpiada.ic.unicamp.br/passadas/OBI2023/qmerito/ps/';
+    final mainResponse = await http.get(Uri.parse(mainUrl));
+    if (mainResponse.statusCode == 200) {
+      final mainDocument = parser.parse(mainResponse.body);
+      final List<Map<String, String>> obiAwards = [];
+      final awards = findObiAwards(mainDocument, studentName, mainUrl);
+      obiAwards.addAll(awards);
+      if (obiAwards.isEmpty) {
+        obi_result = 'Aluno não encontrado\n';
+      } else {
+        obi_result = 'Premiações de $studentName $obiAwards\n';
+      }
+    } else {
+      throw Exception('Failed to load results page');
+    }
+  }
+
+  String parseObiMedalCell(String cellText) {
+    final medalMap = {
+      'ouro': 'Ouro',
+      'prata': 'Prata',
+      'bronze': 'Bronze',
+      'HM': 'Honra ao Mérito',
+    };
+
+    print(cellText);
+
+    for (var key in medalMap.keys) {
+      if (cellText.contains(key)) {
+        return medalMap[key]!;
+      }
+    }
+
+    return '-';
+  }
+
+// Função para percorrer o HTML das urls passadas pela função fetchObmepData, e buscar correspondência de nome.
+  // Ao encontrar correspondência, armazena valores referentes a premiação em um mapa (dicionário) com par chave (ex. award['Nome'] = studentName)
+  // Ao final armazena todas as informações do mapa no resultado "OBMEP awards" e retorna o resultado
+  List<Map<String, String>> findObiAwards(
+      dom.Document document, String studentName, String url) {
+    final tables = document.querySelectorAll('table');
+    final List<Map<String, String>> obiAwards = [];
+    for (final table in tables) {
+      final tbody = table.querySelector('tbody');
+      final rows = tbody?.querySelectorAll('tr');
+
+      if (rows != null) {
+        for (final row in rows) {
+          final cells = row.children;
+          for (int i = 0; i < cells.length; i++) {
+            final cellText = cells[i].text;
+            if (cellText.toLowerCase().contains(studentName.toLowerCase())) {
+              final award = <String, String>{};
+
+              award['Nome'] = cellText; // Armazena o nome completo
+              award['URL'] = url; // Armazena a URL
+              award['Escola'] = cells[4].text;
+              award['Pontuação'] = cells[2].text;
+              award['Cidade - Estado'] = '${cells[5].text} - ${cells[6].text}';
+              award['Medalha'] = parseObiMedalCell(cells[0].innerHtml);
+
+              obiAwards.add(award);
+            }
+          }
+        }
+      }
+    }
+
+    return obiAwards;
   }
 
   // Função para percorrer o HTML das urls passadas pela função fetchObmData, e buscar correspondência de nome.

@@ -12,12 +12,14 @@ class TextValidation {
           content: Text('Insira um nome'),
         ),
       );
+      return ''; // Retorna string vazia para bloquear a busca
     } else if (text.contains(RegExp(r'[0-9]'))) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Não coloque números na busca textual'),
         ),
       );
+      return ''; // Retorna string vazia para bloquear a busca
     } else {
       List<String> names = text.split(' ');
       for (int i = 0; i < names.length; i++) {
@@ -26,8 +28,8 @@ class TextValidation {
         }
       }
       text = names.join(' ');
+      return text;
     }
-    return text;
   }
 }
 
