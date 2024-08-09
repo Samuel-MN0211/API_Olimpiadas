@@ -6,7 +6,6 @@ class SettingsProvider extends ChangeNotifier {
   bool isObcSelected = true;
   bool isObiSelected = true;
   bool isObmepSelected = true;
-  bool isObiSelected = true;
   int? startYear;
   int? endYear;
 

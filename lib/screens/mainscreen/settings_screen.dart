@@ -113,16 +113,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             .toggleObi(); // Use o provider para alternar o estado do checkbox
                       });
                     },
-                  ),CheckboxListTile(
-                    title: Text('OBI'),
-                    value: settingsProvider
-                        .isObiSelected, // Use o provider para obter o estado do checkbox
-                    onChanged: (value) {
-                      setState(() {
-                        settingsProvider
-                            .toggleObi(); // Use o provider para alternar o estado do checkbox
-                      });
-                    },
                   ),
                   CheckboxListTile(
                     title: Text('OBMEP'),
