@@ -13,21 +13,11 @@ class AwardDbController extends ChangeNotifier {
     return querySnapshot.docs.map((doc) =>
     Award.fromFirestore(doc))
     .toList();
-
   }
 
-  Future<dynamic> getData(
-    
-  ) async {
-      // Get docs from collection reference
-      QuerySnapshot querySnapshot = 
-        await _collectionRef
-        .get();
-
-      // Get data from docs and convert map to List
-      final data = convertDocstoList(querySnapshot);
-
-      return data;
+  Future<dynamic> getData() async {
+      QuerySnapshot querySnapshot = await _collectionRef.get();
+      return convertDocstoList(querySnapshot);
   }
 
   Future<dynamic> getFilteredData(Map<String, dynamic> filters) async {
@@ -36,22 +26,20 @@ class AwardDbController extends ChangeNotifier {
     filters.forEach((field, value) {
       if (field == 'timestamp_to') {
         query.where(field, isLessThanOrEqualTo: value);
-      }
-      if (field == 'timestamp_from') {
+      } else if (field == 'timestamp_from') {
         query.where(field, isGreaterThanOrEqualTo: value);
-      }
-      query.where(field, isEqualTo: value);
+      } else {
+        query.where(field, isEqualTo: value);
+      }     
     });
 
     QuerySnapshot querySnapshot = await query.get();
 
-    final data = convertDocstoList(querySnapshot);
-
-    return data;
+    return convertDocstoList(querySnapshot);
   }
 
   Future<DocumentReference> addData(Award award) {
-    return _collectionRef
-        .add(award.toFireStoreMap());
+    return _collectionRef.add(award.toFireStoreMap());
   }
+
 }

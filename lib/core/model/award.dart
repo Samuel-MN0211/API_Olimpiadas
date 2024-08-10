@@ -65,4 +65,5 @@ class Award {
   String toString() {
     return 'Award(name: $name, url: $url, olympiad: $olympiad, school: $school, score: $score, city_state: $city_state, medal: $medal, timestamp: $timestamp)';
   }
+
 }
