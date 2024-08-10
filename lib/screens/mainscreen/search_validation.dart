@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:BOOC/core/app_export.dart';
+import '../../core/app_export.dart';
 
 //Classe para validar, fazer validações referentes a busca, chamada de funções de fetch / find dados e tratamento do clique do botão
 class SearchValidation {

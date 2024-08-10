@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:BOOC/core/utils/size_utils.dart';
+import '../core/utils/size_utils.dart';
 
 String _appTheme = "primary";
 

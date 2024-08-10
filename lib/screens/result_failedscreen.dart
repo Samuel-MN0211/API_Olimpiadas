@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:BOOC/core/app_export.dart';
+import '../core/app_export.dart';
 
 class ResultFailedScreen extends StatefulWidget {
   final String searchTerm;
