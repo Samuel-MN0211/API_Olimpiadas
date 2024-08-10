@@ -6,8 +6,17 @@ import '../firebase_options.dart';
 
 class AwardDbController extends ChangeNotifier {
 
-  CollectionReference _collectionRef =
+  CollectionReference _collectionRef = 
     FirebaseFirestore.instance.collection('Searched_users');
+
+  AwardDbController() {
+    init();
+  }
+
+  Future<void> init() async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+  }  
 
   List<dynamic> convertDocstoList(QuerySnapshot querySnapshot) {
     return querySnapshot.docs.map((doc) =>
