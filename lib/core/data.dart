@@ -4,7 +4,7 @@ import 'package:html/dom.dart' as dom;
 import 'package:pdf/widgets.dart' as pdfLib;
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:BOOC/core/app_export.dart';
+import 'app_export.dart';
 
 class Data {
   String obm_result = 'Aluno não encontrado\n';

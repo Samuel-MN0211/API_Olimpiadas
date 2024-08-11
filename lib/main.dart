@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:BOOC/core/app_export.dart';
+import 'core/app_export.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
