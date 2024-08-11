@@ -25,3 +25,4 @@ export '../screens/mainscreen/settings_screen.dart';
 export 'package:BOOC/core/utils/provider_settings/settings_provider.dart';
 export 'package:pdf/pdf.dart';
 export '../core/data.dart';
+export 'package:BOOC/screens/SearchScreen.dart';

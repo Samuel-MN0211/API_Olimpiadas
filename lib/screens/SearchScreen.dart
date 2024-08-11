@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:BOOC/core/app_export.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -9,11 +7,18 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _nameController = TextEditingController();
-  String selectedOlympiad = 'OBM';
-  String selectedMedal = 'Ouro';
+  String selectedOlympiad = 'Todos';
+  String selectedMedal = 'Todas';
 
-  final List<String> olympiadOptions = ['OBM', 'OBI', 'OBC', 'OBMEP'];
+  final List<String> olympiadOptions = [
+    'Todos',
+    'OBM',
+    'OBI',
+    'OBC',
+    'OBMEP',
+  ];
   final List<String> medalOptions = [
+    'Todas',
     'Ouro',
     'Prata',
     'Bronze',
@@ -41,16 +46,15 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildHeader(),
-              SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                SizedBox(height: 15),
+                Row(
                   children: [
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: TextField(
                         controller: _nameController,
                         decoration: InputDecoration(
@@ -59,15 +63,19 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  children: [
                     Expanded(
-                      flex: 1,
+                      flex: 3,
                       child: DropdownButtonFormField<String>(
                         value: selectedOlympiad,
                         items: olympiadOptions.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value, overflow: TextOverflow.ellipsis),
                           );
                         }).toList(),
                         onChanged: (newValue) {
@@ -83,13 +91,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     SizedBox(width: 8),
                     Expanded(
-                      flex: 1,
+                      flex: 3,
                       child: DropdownButtonFormField<String>(
                         value: selectedMedal,
                         items: medalOptions.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value, overflow: TextOverflow.ellipsis),
                           );
                         }).toList(),
                         onChanged: (newValue) {
@@ -103,73 +111,26 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.search),
+                  ],
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
                       onPressed: _search,
+                      child: Icon(Icons.search),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20),
-              ...searchResults
-                  .map((result) => _buildResultContainer(result))
-                  .toList(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return SizedBox(
-      height: 305,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 31),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 137,
-                    width: 224,
-                    child: Stack(
-                      alignment: Alignment.centerRight,
-                      children: [
-                        Image.asset(
-                          'assets/vector.png',
-                          height: 74,
-                          width: 224,
-                          alignment: Alignment.bottomCenter,
-                        ),
-                        Image.asset(
-                          'assets/group.png',
-                          height: 137,
-                          width: 14,
-                          alignment: Alignment.centerRight,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Divider(),
-                  SizedBox(height: 8),
-                  Text(
-                    "BOOC",
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  SizedBox(height: 12),
-                ],
-              ),
+                SizedBox(height: 20),
+                ...searchResults
+                    .map((result) => _buildResultContainer(result))
+                    .toList(),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -188,7 +149,6 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Text(
             result['Nome'] ?? '-',
-            style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(height: 9),
           _buildResultSection(

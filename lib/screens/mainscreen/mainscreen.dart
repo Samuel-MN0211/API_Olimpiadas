@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/app_export.dart';
+import 'package:BOOC/core/app_export.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -48,16 +48,14 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         SizedBox(height: 40.v),
                         Stack(
-                          alignment: Alignment
-                              .center, // Centraliza o conteúdo do Stack
+                          alignment: Alignment.center,
                           children: [
                             Padding(
                               padding: EdgeInsets.only(right: 75.h),
                               child: Ink(
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(
-                                      100), // Define a borda do círculo para o Container
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
                                 child: ElevatedButton(
                                   onPressed: isLoading
@@ -170,6 +168,21 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                         SizedBox(height: 5.v),
                       ],
+                    ),
+                    Positioned(
+                      top: 220.v,
+                      right: 80.h,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          showSearchSettingsModal(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: const CircleBorder(),
+                          padding: EdgeInsets.all(20.h),
+                          side: BorderSide(color: appTheme.blueGray700),
+                        ),
+                        child: Icon(Icons.history, color: appTheme.blueGray700),
+                      ),
                     ),
                     Positioned(
                       top: 220.v,
