@@ -56,7 +56,7 @@ Future<DocumentReference?> addData(Award award) async {
     Map<String, dynamic> awardMap = award.toFireStoreMap();
     Map<String, dynamic> filteredMap = Map.fromEntries(
       awardMap.entries.where((entry) => 
-        ['Nome', 'Olimpíada', 'Medalha'].contains(entry.key))
+        ['Nome', 'Olimpíada', 'Ano', 'Medalha'].contains(entry.key))
     );
     List<dynamic> previousAwards = await getFilteredData(filteredMap);
 

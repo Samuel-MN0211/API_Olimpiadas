@@ -168,7 +168,8 @@ class ResultFoundScreen extends StatelessWidget {
      Award model = Award(
       name: parsedAward['Nome'] ?? '-',
       url: parsedAward['URL'] ?? '-',
-      olympiad: awardTitle,
+      olympiad: awardType,
+      year: int.parse(awardYear),
       medal: parsedAward['Medalha'] ?? '-',
       school: parsedAward['Escola'],
       score: double.parse(parsedAward['Pontuação'] ?? '0'),
