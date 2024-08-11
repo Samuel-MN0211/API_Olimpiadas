@@ -10,3 +10,12 @@ void showSettingsModal(BuildContext context) {
     },
   );
 }
+
+void showSearchSettingsModal(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return SearchScreen();
+    },
+  );
+}
