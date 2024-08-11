@@ -9,6 +9,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _nameController = TextEditingController();
   final AwardDbController _dbController = AwardDbController();
+  List<dynamic> searchResults = [];
   String selectedOlympiad = 'Todas';
   String selectedMedal = 'Todas';
 
@@ -30,21 +31,18 @@ class _SearchScreenState extends State<SearchScreen> {
     'Todas': null
   };
 
-  List<Map<String, String>> searchResults = []; // Resultados de exemplo
-
   void _search() async {
-    // Simulando uma busca
-    
     Map<String, dynamic> filters = {
       'Nome': _nameController.text,
       'Olimpíada': optionsMap.containsKey(selectedOlympiad) ? null : selectedOlympiad,
       'Medalha': optionsMap.containsKey(selectedMedal) ? null : selectedMedal,
     };
-    List<dynamic> searchResults = await _dbController.getFilteredData(filters);
-    print(searchResults);
+    List<dynamic> res = await _dbController.getFilteredData(filters);
+    List<Map<String, dynamic>> formattedAwards = [];
+    res.forEach((result) =>  formattedAwards.add(result.toFireStoreMap()));
 
     setState(() {
-      searchResults = searchResults;
+      searchResults = formattedAwards;
     });
   }
 
@@ -142,7 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildResultContainer(Map<String, String> result) {
+  Widget _buildResultContainer(Map<String, dynamic> result) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 19, vertical: 20),
