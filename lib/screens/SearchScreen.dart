@@ -1,3 +1,4 @@
+import '../core/db_controller.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -7,11 +8,12 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _nameController = TextEditingController();
-  String selectedOlympiad = 'Todos';
+  final AwardDbController _dbController = AwardDbController();
+  String selectedOlympiad = 'Todas';
   String selectedMedal = 'Todas';
 
   final List<String> olympiadOptions = [
-    'Todos',
+    'Todas',
     'OBM',
     'OBI',
     'OBC',
@@ -24,20 +26,25 @@ class _SearchScreenState extends State<SearchScreen> {
     'Bronze',
     'Menção Honrosa'
   ];
+  final Map<String, dynamic> optionsMap = {
+    'Todas': null
+  };
 
   List<Map<String, String>> searchResults = []; // Resultados de exemplo
 
-  void _search() {
+  void _search() async {
     // Simulando uma busca
+    
+    Map<String, dynamic> filters = {
+      'Nome': _nameController.text,
+      'Olimpíada': optionsMap.containsKey(selectedOlympiad) ? null : selectedOlympiad,
+      'Medalha': optionsMap.containsKey(selectedMedal) ? null : selectedMedal,
+    };
+    List<dynamic> searchResults = await _dbController.getFilteredData(filters);
+    print(searchResults);
+
     setState(() {
-      searchResults = [
-        {
-          'Nome': _nameController.text,
-          'Olimpíada': selectedOlympiad,
-          'Medalha': selectedMedal,
-        },
-        // Adicione mais resultados conforme necessário
-      ];
+      searchResults = searchResults;
     });
   }
 

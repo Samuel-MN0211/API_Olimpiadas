@@ -30,18 +30,22 @@ class AwardDbController extends ChangeNotifier {
       return convertDocstoList(querySnapshot);
   }
 
-  Future<dynamic> getFilteredData(Map<String, dynamic> filters) async {
+  Future<List<dynamic>> getFilteredData(Map<String, dynamic> filters) async {
     Query query = _collectionRef;
-    
+
     filters.forEach((field, value) {
-      if (field == 'timestamp_to') {
-        query = query.where(field, isLessThanOrEqualTo: value);
-      } else if (field == 'timestamp_from') {
-        query = query.where(field, isGreaterThanOrEqualTo: value);
-      } else {
-        query = query.where(field, isEqualTo: value);
-      }     
+      if (value != null) {
+        if (field == 'timestamp_to') {
+          query = query.where(field, isLessThanOrEqualTo: value);
+        } else if (field == 'timestamp_from') {
+          query = query.where(field, isGreaterThanOrEqualTo: value);
+        } else {
+          query = query.where(field, isEqualTo: value);
+        }
+      }
     });
+
+    print(filters);
 
     QuerySnapshot querySnapshot = await query.get();
 
@@ -54,7 +58,6 @@ Future<DocumentReference?> addData(Award award) async {
       awardMap.entries.where((entry) => 
         ['Nome', 'Olimpíada', 'Medalha'].contains(entry.key))
     );
-
     List<dynamic> previousAwards = await getFilteredData(filteredMap);
 
     if (previousAwards.length == 0) {

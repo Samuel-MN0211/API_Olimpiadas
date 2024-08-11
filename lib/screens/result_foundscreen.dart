@@ -1,12 +1,13 @@
-import '../core/db_controller.dart';
 import 'package:flutter/material.dart';
-import '../core/model/award.dart';
+
 import '../core/app_export.dart';
+import '../core/db_controller.dart';
+import '../core/model/award.dart';
 
 // Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
 
 class ResultFoundScreen extends StatelessWidget {
-  AwardDbController awardDbController = AwardDbController();
+  final AwardDbController _dbController = AwardDbController();
   final String obmawards;
   final String obcawards;
   final String obiAwards;
@@ -175,7 +176,7 @@ class ResultFoundScreen extends StatelessWidget {
       timestamp: DateTime.timestamp()
 
     );
-    dynamic res = awardDbController.addData(model);
+    _dbController.addData(model);
 
     return SingleChildScrollView(
       child: Container(
