@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import './model/award.dart';
+import 'model/award.dart';
 import '../firebase_options.dart';
 
 class AwardDbController extends ChangeNotifier {

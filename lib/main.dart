@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'core/app_export.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'screens/splashscreen/splashscreen.dart';
+import 'core/app_export.dart';
 import 'firebase_options.dart';
 
 void main() async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navigateToMain.dart';
 import '../../core/app_export.dart';
 
 // classe de "SplashScreen" que é a tela de abertura do aplicativo.

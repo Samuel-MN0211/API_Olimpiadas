@@ -1,9 +1,11 @@
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' as parser;
-import 'package:html/dom.dart' as dom;
-import 'package:pdf/widgets.dart' as pdfLib;
 import 'dart:io';
+
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' as parser;
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pdfLib;
+
 import 'app_export.dart';
 
 class Data {

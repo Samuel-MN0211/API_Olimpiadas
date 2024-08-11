@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../core/app_export.dart';
+import '../screens/splashscreen/splashscreen.dart';
 
 class AppRoutes {
   static const String mainScreen = '/mainscreen';

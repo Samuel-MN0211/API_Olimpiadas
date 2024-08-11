@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../core/app_export.dart';
 
 // Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
