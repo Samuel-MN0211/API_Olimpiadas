@@ -24,14 +24,14 @@ class Award {
   factory Award.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Award(
-      name: data['name'] ?? '',
-      url: data['url'] ?? '',
-      olympiad: data['olympiad'] ?? '',
-      school: data['school'],
-      score: data['score']?.toDouble() ?? 0.0,
-      city_state: data['city_state'],
-      medal: data['medal'] ?? '',
-      timestamp: data['timestamp'] ?? DateTime.timestamp()
+      name: data['Nome'] ?? '',
+      url: data['URL'] ?? '',
+      olympiad: data['Olimpíada'] ?? '',
+      school: data['Escola'],
+      score: data['Pontuação']?.toDouble() ?? 0.0,
+      city_state: data['Cidade - Estado'],
+      medal: data['Medalha'] ?? '',
+      timestamp: data['TimeStamp'].toDate() ?? DateTime.timestamp()
     );
   }
 

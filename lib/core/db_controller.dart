@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'model/award.dart';
+
 import '../firebase_options.dart';
+import 'model/award.dart';
 
 class AwardDbController extends ChangeNotifier {
 
@@ -34,11 +35,11 @@ class AwardDbController extends ChangeNotifier {
     
     filters.forEach((field, value) {
       if (field == 'timestamp_to') {
-        query.where(field, isLessThanOrEqualTo: value);
+        query = query.where(field, isLessThanOrEqualTo: value);
       } else if (field == 'timestamp_from') {
-        query.where(field, isGreaterThanOrEqualTo: value);
+        query = query.where(field, isGreaterThanOrEqualTo: value);
       } else {
-        query.where(field, isEqualTo: value);
+        query = query.where(field, isEqualTo: value);
       }     
     });
 
@@ -47,8 +48,20 @@ class AwardDbController extends ChangeNotifier {
     return convertDocstoList(querySnapshot);
   }
 
-  Future<DocumentReference> addData(Award award) {
-    return _collectionRef.add(award.toFireStoreMap());
+Future<DocumentReference?> addData(Award award) async {
+    Map<String, dynamic> awardMap = award.toFireStoreMap();
+    Map<String, dynamic> filteredMap = Map.fromEntries(
+      awardMap.entries.where((entry) => 
+        ['Nome', 'Olimpíada', 'Medalha'].contains(entry.key))
+    );
+
+    List<dynamic> previousAwards = await getFilteredData(filteredMap);
+
+    if (previousAwards.length == 0) {
+      return _collectionRef.add(award.toFireStoreMap());
+    } else {
+      return null;
+    }
   }
 
 }

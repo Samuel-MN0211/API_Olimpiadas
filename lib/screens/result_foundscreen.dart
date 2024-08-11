@@ -1,17 +1,19 @@
+import '../core/db_controller.dart';
 import 'package:flutter/material.dart';
-
+import '../core/model/award.dart';
 import '../core/app_export.dart';
 
 // Tela de resultado: Roteada apenas se a busca realizada na mainScreen tiver correspondências de nome em alguma URL de site de olímpiada
 
 class ResultFoundScreen extends StatelessWidget {
+  AwardDbController awardDbController = AwardDbController();
   final String obmawards;
   final String obcawards;
   final String obiAwards;
   final String obmepAwards;
   final String searchTerm;
 
-  const ResultFoundScreen({
+  ResultFoundScreen({
     Key? key,
     required this.obmawards,
     required this.obcawards,
@@ -125,9 +127,6 @@ class ResultFoundScreen extends StatelessWidget {
     List<Widget> resultContainers = [];
     List<String> occurrences = awardsString.split('}, {');
 
-    print("BUILDING");
-    print(occurrences);
-
     for (var occurrence in occurrences) {
       // Limpeza da string para remover { e }
       occurrence = occurrence.replaceAll('{', '').replaceAll('}', '');
@@ -154,15 +153,29 @@ class ResultFoundScreen extends StatelessWidget {
     if (parsedAward['URL']?.contains('obmep') == true) {
       awardType = 'OBMEP';
       awardYear = 'Edição 18';
-    } else if (parsedAward['URL']?.contains('obm') == true) {
+    } else if (parsedAward['URL']?.toLowerCase().contains('obm') == true) {
       awardType = 'OBM';
-    } else if (parsedAward['URL']?.contains('obciencias') == true) {
+    } else if (parsedAward['URL']?.toLowerCase().contains('obciencias') == true) {
       awardType = 'OBC';
-    } else if (parsedAward['URL']?.contains('obi') == true) {
+    } else if (parsedAward['URL']?.toLowerCase().contains('obi') == true) {
       awardType = 'OBI';
-    } 
+      awardYear = '2023';
+    }
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
+
+     Award model = Award(
+      name: parsedAward['Nome'] ?? '-',
+      url: parsedAward['URL'] ?? '-',
+      olympiad: awardTitle,
+      medal: parsedAward['Medalha'] ?? '-',
+      school: parsedAward['Escola'],
+      score: double.parse(parsedAward['Pontuação'] ?? '0'),
+      city_state: parsedAward['Cidade - Estado'],
+      timestamp: DateTime.timestamp()
+
+    );
+    dynamic res = awardDbController.addData(model);
 
     return SingleChildScrollView(
       child: Container(
