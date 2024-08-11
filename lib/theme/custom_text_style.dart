@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:BOOC/core/utils/size_utils.dart';
-import 'package:BOOC/theme/theme_helper.dart';
+import '../core/utils/size_utils.dart';
+import 'theme_helper.dart';
 
 /// A collection of pre-defined text styles for customizing text appearance,
 /// categorized by different font families and weights.
