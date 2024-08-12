@@ -31,9 +31,36 @@ class _SearchScreenState extends State<SearchScreen> {
     'Todas': null
   };
 
+  @override
+  void initState() {
+    super.initState();
+    initializeState();
+  }
+
+  void initializeState() {
+    setState(() {
+      //Incluir funções necessárias para inicializar busca aqui
+      _initialSearch();
+    });
+  }
+
+  void _initialSearch() async {
+    Map<String, dynamic> filters = {
+      'timestamp_from': DateTime.timestamp().subtract(Duration(days: 5))
+    };
+    int limit = 10;
+    List<dynamic> res = await _dbController.getFilteredData(filters, limit: limit);
+    List<Map<String, dynamic>> formattedAwards = [];
+    res.forEach((result) =>  formattedAwards.add(result.toFireStoreMap()));
+
+    setState(() {
+      searchResults = formattedAwards;
+    });
+  }
+
   void _search() async {
     Map<String, dynamic> filters = {
-      'Nome': _nameController.text,
+      'Nome': _nameController.text.isEmpty ? null : _nameController.text,
       'Olimpíada': optionsMap.containsKey(selectedOlympiad) ? null : selectedOlympiad,
       'Medalha': optionsMap.containsKey(selectedMedal) ? null : selectedMedal,
     };
@@ -159,6 +186,10 @@ class _SearchScreenState extends State<SearchScreen> {
           _buildResultSection(
             title: "Olimpíada:",
             value: result['Olimpíada'] ?? '-',
+          ),
+          _buildResultSection(
+            title: "Ano:",
+            value: result['Ano'].toString(),
           ),
           SizedBox(height: 10),
           _buildResultSection(

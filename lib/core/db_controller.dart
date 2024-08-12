@@ -30,22 +30,26 @@ class AwardDbController extends ChangeNotifier {
       return convertDocstoList(querySnapshot);
   }
 
-  Future<List<dynamic>> getFilteredData(Map<String, dynamic> filters) async {
+  Future<List<dynamic>> getFilteredData(Map<String, dynamic> filters, {int? limit}) async {
     Query query = _collectionRef;
 
     filters.forEach((field, value) {
       if (value != null) {
         if (field == 'timestamp_to') {
-          query = query.where(field, isLessThanOrEqualTo: value);
+          query = query.where('TimeStamp', isLessThanOrEqualTo: value);
         } else if (field == 'timestamp_from') {
-          query = query.where(field, isGreaterThanOrEqualTo: value);
+          query = query.where('TimeStamp', isGreaterThanOrEqualTo: value);
         } else {
           query = query.where(field, isEqualTo: value);
         }
       }
     });
 
-    print(filters);
+    query = query.orderBy('TimeStamp', descending: true);
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
 
     QuerySnapshot querySnapshot = await query.get();
 
