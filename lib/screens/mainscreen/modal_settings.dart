@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/app_export.dart';
 
 //Classe que retorna instancia de SettingsScreen para ser exibida como modal

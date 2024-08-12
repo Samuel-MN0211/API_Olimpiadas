@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/app_export.dart';
 
 // Widget precisa ser encapsulado em uma classe e declarado como estático para poder ser chamado dentro do "widget build" de outras classes

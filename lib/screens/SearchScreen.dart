@@ -1,3 +1,4 @@
+import '../core/db_controller.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -7,11 +8,13 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _nameController = TextEditingController();
-  String selectedOlympiad = 'Todos';
+  final AwardDbController _dbController = AwardDbController();
+  List<dynamic> searchResults = [];
+  String selectedOlympiad = 'Todas';
   String selectedMedal = 'Todas';
 
   final List<String> olympiadOptions = [
-    'Todos',
+    'Todas',
     'OBM',
     'OBI',
     'OBC',
@@ -24,20 +27,49 @@ class _SearchScreenState extends State<SearchScreen> {
     'Bronze',
     'Menção Honrosa'
   ];
+  final Map<String, dynamic> optionsMap = {
+    'Todas': null
+  };
 
-  List<Map<String, String>> searchResults = []; // Resultados de exemplo
+  @override
+  void initState() {
+    super.initState();
+    initializeState();
+  }
 
-  void _search() {
-    // Simulando uma busca
+  void initializeState() {
     setState(() {
-      searchResults = [
-        {
-          'Nome': _nameController.text,
-          'Olimpíada': selectedOlympiad,
-          'Medalha': selectedMedal,
-        },
-        // Adicione mais resultados conforme necessário
-      ];
+      //Incluir funções necessárias para inicializar busca aqui
+      _initialSearch();
+    });
+  }
+
+  void _initialSearch() async {
+    Map<String, dynamic> filters = {
+      'timestamp_from': DateTime.timestamp().subtract(Duration(days: 5))
+    };
+    int limit = 10;
+    List<dynamic> res = await _dbController.getFilteredData(filters, limit: limit);
+    List<Map<String, dynamic>> formattedAwards = [];
+    res.forEach((result) =>  formattedAwards.add(result.toFireStoreMap()));
+
+    setState(() {
+      searchResults = formattedAwards;
+    });
+  }
+
+  void _search() async {
+    Map<String, dynamic> filters = {
+      'Nome': _nameController.text.isEmpty ? null : _nameController.text,
+      'Olimpíada': optionsMap.containsKey(selectedOlympiad) ? null : selectedOlympiad,
+      'Medalha': optionsMap.containsKey(selectedMedal) ? null : selectedMedal,
+    };
+    List<dynamic> res = await _dbController.getFilteredData(filters);
+    List<Map<String, dynamic>> formattedAwards = [];
+    res.forEach((result) =>  formattedAwards.add(result.toFireStoreMap()));
+
+    setState(() {
+      searchResults = formattedAwards;
     });
   }
 
@@ -135,7 +167,7 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildResultContainer(Map<String, String> result) {
+  Widget _buildResultContainer(Map<String, dynamic> result) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
       padding: EdgeInsets.symmetric(horizontal: 19, vertical: 20),
@@ -154,6 +186,10 @@ class _SearchScreenState extends State<SearchScreen> {
           _buildResultSection(
             title: "Olimpíada:",
             value: result['Olimpíada'] ?? '-',
+          ),
+          _buildResultSection(
+            title: "Ano:",
+            value: result['Ano'].toString(),
           ),
           SizedBox(height: 10),
           _buildResultSection(

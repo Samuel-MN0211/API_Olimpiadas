@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/app_export.dart';
 
 //Classe para validar, fazer validações referentes a busca, chamada de funções de fetch / find dados e tratamento do clique do botão
@@ -12,11 +13,9 @@ class SearchValidation {
     if (validatedText.isNotEmpty) {
       textEditingController.text = validatedText;
       if (settingsProvider.isObmSelected == true) {
-        print('ATIVOU ATIVOU ATIVOU OBM');
         await data.fetchObmData(textEditingController.text, settingsProvider);
       }
       if (settingsProvider.isObcSelected == true) {
-        print('ATIVOU ATIVOU ATIVOU OBC');
         await data.fetchObcData(textEditingController.text);
       }
       if (settingsProvider.isObiSelected == true) {
