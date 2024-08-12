@@ -68,7 +68,8 @@ class ResultFoundScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                               vertical: 12.v,
                               horizontal: 15.h,
-                            ), backgroundColor: appTheme.blueGray700,
+                            ),
+                            backgroundColor: appTheme.blueGray700,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -92,7 +93,8 @@ class ResultFoundScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                               vertical: 12.v,
                               horizontal: 15.h,
-                            ), backgroundColor: appTheme.blueGray700,
+                            ),
+                            backgroundColor: appTheme.blueGray700,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -159,7 +161,7 @@ class ResultFoundScreen extends StatelessWidget {
       awardType = 'OBC';
     } else if (parsedAward['URL']?.contains('obi') == true) {
       awardType = 'OBI';
-    } 
+    }
 
     String awardTitle = awardType.isEmpty ? 'Award' : '$awardType - $awardYear';
 

@@ -114,7 +114,8 @@ class Data {
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObiData(String studentName) async {
     print("Começou OBI");
-    final mainUrl = 'https://olimpiada.ic.unicamp.br/passadas/OBI2023/qmerito/ps/';
+    final mainUrl =
+        'https://olimpiada.ic.unicamp.br/passadas/OBI2023/qmerito/ps/';
     final mainResponse = await http.get(Uri.parse(mainUrl));
     if (mainResponse.statusCode == 200) {
       final mainDocument = parser.parse(mainResponse.body);
@@ -131,7 +132,7 @@ class Data {
     }
   }
 
-    //Método para buscar URLS desejadas e retornar status da busca da OBMEP
+  //Método para buscar URLS desejadas e retornar status da busca da OBMEP
   //Dentro do corpo chama função para percorrer o HTML das URLs identificada e com statuscode 200 (sucesso no get) e buscar as premiações
   Future<void> fetchObmepData(String studentName) async {
     print("Começou OBMEP");
@@ -256,10 +257,6 @@ class Data {
                 award['Medalha'] = cells[i + 3].text;
               }
             } else if (url.contains('2016') ||
-                url.contains('2015') ||
-                url.contains('2014') ||
-                url.contains('2013') ||
-                url.contains('2012') ||
                 url.contains('2011') ||
                 url.contains('2010') ||
                 url.contains('2009') ||
@@ -280,6 +277,20 @@ class Data {
 
               if (i + 2 < cells.length) {
                 award['Cidade - Estado'] = cells[i + 2].text;
+              }
+              if (i + 3 < cells.length) {
+                award['Medalha'] = cells[i + 3].text;
+              }
+            } else if (url.contains('2015') ||
+                url.contains('2014') ||
+                url.contains('2013') ||
+                url.contains('2012')) {
+              if (i + 1 < cells.length) {
+                award['Cidade - Estado'] = cells[i + 1].text;
+              }
+
+              if (i + 2 < cells.length) {
+                award['Pontuação'] = cells[i + 2].text;
               }
               if (i + 3 < cells.length) {
                 award['Medalha'] = cells[i + 3].text;
@@ -416,7 +427,6 @@ class Data {
     return obmepAwards;
   }
 }
-
 
 // Classe para criar PDF, mudar de lugar depois
 class PdfCreator {
